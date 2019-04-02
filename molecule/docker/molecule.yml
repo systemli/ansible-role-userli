@@ -5,6 +5,7 @@ scenario:
 dependency:
   name: galaxy
   options:
+    role-file: ../defaults/requirements.yml
     force: false
 
 driver:

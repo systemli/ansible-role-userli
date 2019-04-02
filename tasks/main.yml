@@ -21,7 +21,7 @@
 
 - name: download release
   get_url:
-    url: https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz
+    url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz"
     dest: "{{ userli_home }}"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
@@ -47,7 +47,7 @@
     dest: "{{ userli_home }}/userli-{{ userli_version }}"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
-    remote_src: True
+    remote_src: true
   when: userli_download.changed
 
 - name: update permissions for release directory
