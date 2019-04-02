@@ -1,0 +1,38 @@
+---
+
+- name: clear and warmup cache
+  shell: bin/console cache:clear && bin/console cache:warmup
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"
+  ignore_errors: yes
+  register: cache
+
+- name: handle cache:clear errors
+  shell: rm -rf var/cache/prod && bin/console cache:warmup
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"
+  when:
+    - not ansible_check_mode
+    - cache.rc != 0
+
+- name: load default reservedNames into database
+  shell: bin/console app:reservednames:import
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"
+
+- name: load custom reservedNames into database
+  shell: 'echo "{{ userli_extra_reserved_names|join("\n") }}" | bin/console app:reservednames:import --file=-'
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"
