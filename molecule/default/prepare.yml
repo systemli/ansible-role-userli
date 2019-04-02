@@ -12,6 +12,9 @@
       root /var/www/userli/public
       # PHP-FPM Configuration
       fastcgi / /run/php/php7.1-fpm.sock php
+      rewrite {
+        to {path} /index.php?{query}
+      }
     caddy_systemd_network_dependency: false
     caddy_systemd_restart_startlimitinterval: 10
   tasks:
