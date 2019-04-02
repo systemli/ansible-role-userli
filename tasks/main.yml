@@ -70,8 +70,8 @@
   template:
     src: ".env.local.j2"
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
-    owner: "root"
-    group: "userli"
+    owner: "{{ userli_user }}"
+    group: "{{ userli_user }}"
     mode: 0640
   notify: dump environment for better performance
 
