@@ -1,3 +1,5 @@
+---
+
 userli_mysql_user: "userli"
 userli_mysql_password: "{{ secrets_userli_mysql_password }}"
 userli_mysql_root_password: "{{ secrets_userli_mysql_root_password }}"
@@ -10,8 +12,9 @@ userli_sha512_checksum: "e70347637864d51e4f14c83caeb8f21a3db86f9b4121235eed26bab
 userli_user: "userli"
 userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/www"
+
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
-userli_update: False
+userli_update: false
 
 # dovecot user
 userli_dovecot_user: dovecot

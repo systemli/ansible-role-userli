@@ -7,7 +7,7 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
-  ignore_errors: yes
+  ignore_errors: true
   register: cache
 
 - name: handle cache:clear errors
@@ -30,7 +30,8 @@
   become_user: "{{ userli_user }}"
 
 - name: load custom reservedNames into database
-  shell: 'echo "{{ userli_extra_reserved_names|join("\n") }}" | bin/console app:reservednames:import --file=-'
+  shell: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
+    | bin/console app:reservednames:import --file=-'
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
