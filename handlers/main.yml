@@ -1,0 +1,12 @@
+- name: restart munin-node
+  service:
+    name: munin-node
+    state: restarted
+
+- name: dump environment for better performance
+  command: composer dump-env prod
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"

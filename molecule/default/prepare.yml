@@ -1,0 +1,58 @@
+---
+
+- name: Prepare
+  hosts: all
+  become: true
+  roles:
+    - manala.apt
+    - manala.php
+    - samdoran.caddy
+    - geerlingguy.mysql
+  vars:
+    caddy_root: /var/www
+    manala_apt_repositories:
+      - sury_php
+    manala_apt_repositories_exclusive: false
+    manala_apt_preferences:
+      - php@sury_php
+    manala_apt_packages:
+      - acl  # support for unpriviledged become_user
+      - git
+      - libcap2-bin  # getcap for caddy
+      - make
+      - postfix
+      - unzip
+      - zip
+    manala_php_version: 7.1
+    manala_php_extensions:
+      # necessary
+      - apcu
+      - curl
+      - gd
+      - sodium
+      - mbstring
+      - mysql
+      - xml
+      - zip
+      # performance
+      - ctype
+      - intl
+      # debugging
+      - xdebug
+    manala_php_extensions_exclusive: false
+    manala_php_sapis:
+      - cli
+      - fpm
+    mysql_users:
+      - name: userli
+        password: userli
+        priv: "userli.*:ALL"
+
+- name: Install composer with php 7.1
+  hosts: all
+  become: true
+  roles:
+    - manala.apt
+  vars:
+    manala_apt_packages:
+      - composer  # for composer dump-env

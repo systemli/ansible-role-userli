@@ -1,0 +1,6 @@
+---
+
+- name: ensure libsodium is installed
+  apt:
+    pkg: php-sodium
+    state: present

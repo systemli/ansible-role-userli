@@ -1,0 +1,21 @@
+galaxy_info:
+  author: systemli
+  description: |
+    This role installs Userli, a web application to (self-) manage email users
+    and encrypt their mailboxes. Find more information at
+    https://systemli.github.io/userli/.
+  company: systemli.org
+  license: GPLv3
+  min_ansible_version: 2.5.1
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+  galaxy_tags:
+    - networking
+    - mail
+    - dovecot
+    - crypto
+
+dependencies: []
