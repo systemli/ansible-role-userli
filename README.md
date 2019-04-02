@@ -1,6 +1,8 @@
 ansible-role-userli
 ==================
 
+[![Build Status](https://travis-ci.org/systemli/ansible-role-userli.svg?branch=master)](https://travis-ci.org/systemli/ansible-role-userli)
+
 This role installs Userli, a web application to (self-) manage email users
 and encrypt their mailboxes. Find more information at
 https://systemli.github.io/userli/.
