@@ -1,8 +1,6 @@
 ---
+- src: antoiner77.caddy
 - src: manala.apt
   version: 1.0.34
 - src: manala.php
   version: 1.0.13
-- src: antoiner77.caddy
-- src: geerlingguy.mysql
-  version: 2.9.4

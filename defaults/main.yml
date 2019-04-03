@@ -4,6 +4,7 @@ userli_mysql_user: "userli"
 userli_mysql_password: "{{ secrets_userli_mysql_password }}"
 userli_mysql_root_password: "{{ secrets_userli_mysql_root_password }}"
 userli_mysql_db: "userli"
+userli_mysql_priv: "{{ userli_mysql_db }}.*:ALL"
 userli_db_type: mysql
 userli_db_url: "{{ userli_db_type }}://{{ userli_mysql_user }}:{{ userli_mysql_password }}@127.0.0.1:3306/{{ userli_mysql_db }}"
 userli_home: "/var/www/"

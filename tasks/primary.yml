@@ -10,20 +10,11 @@
     login_password: "{{ userli_mysql_root_password }}"
   register: database_creation
 
-- name: create default database schema
-  shell: bin/console doctrine:schema:create
-  args:
-    chdir: "{{ userli_symfony_path }}"
-  environment:
-    APP_ENV: "prod"
-  become_user: "{{ userli_user }}"
-  when: database_creation.changed
-
 - name: ensure mysql user is present
   mysql_user:
     name: "{{ userli_mysql_user }}"
     password: "{{ userli_mysql_password }}"
-    priv: "{{ userli_mysql_db }}.*:INSERT,SELECT,UPDATE/{{ userli_mysql_db }}.virtual_aliases:DELETE/{{ userli_mysql_db }}.virtual_vouchers:DELETE"
+    priv: "{{ userli_mysql_priv }}"
     host: "localhost"
     login_user: root
     login_password: "{{ userli_mysql_root_password }}"
@@ -38,6 +29,15 @@
     login_password: "{{ userli_mysql_root_password }}"
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
+
+- name: create default database schema
+  shell: bin/console doctrine:schema:create
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become_user: "{{ userli_user }}"
+  when: database_creation.changed
 
 - name: ensure deleted users are purged daily
   cron:
