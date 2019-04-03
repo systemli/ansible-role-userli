@@ -32,6 +32,7 @@
   roles:
     - manala.apt
     - manala.php
+    - manala.mysql
   vars:
     manala_apt_repositories:
       - sury_php
@@ -40,8 +41,6 @@
       - php@sury_php
     manala_apt_packages:
       - acl  # support for unpriviledged become_user
-      - mysql-server
-      - python-mysqldb
       - unzip
     manala_php_version: 7.1
     manala_php_extensions:
