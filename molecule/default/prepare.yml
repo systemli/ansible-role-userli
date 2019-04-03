@@ -31,7 +31,6 @@
   roles:
     - manala.apt
     - manala.php
-    - geerlingguy.mysql
   vars:
     manala_apt_repositories:
       - sury_php
@@ -40,11 +39,9 @@
       - php@sury_php
     manala_apt_packages:
       - acl  # support for unpriviledged become_user
-      - git
-      - make
-      - postfix
+      - mariadb-server
+      - python-mysqldb
       - unzip
-      - zip
     manala_php_version: 7.1
     manala_php_extensions:
       # necessary
@@ -59,22 +56,7 @@
       # performance
       - ctype
       - intl
-      # debugging
-      - xdebug
     manala_php_extensions_exclusive: false
     manala_php_sapis:
       - cli
       - fpm
-    mysql_users:
-      - name: userli
-        password: userli
-        priv: "userli.*:ALL"
-
-- name: Install composer with php 7.1
-  hosts: all
-  become: true
-  roles:
-    - manala.apt
-  vars:
-    manala_apt_packages:
-      - composer  # for composer dump-env

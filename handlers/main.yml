@@ -12,3 +12,4 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
+  ignore_errors: true
