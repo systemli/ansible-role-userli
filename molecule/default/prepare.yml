@@ -39,7 +39,7 @@
       - php@sury_php
     manala_apt_packages:
       - acl  # support for unpriviledged become_user
-      - mariadb-server
+      - mysql-server
       - python-mysqldb
       - unzip
     manala_php_version: 7.1
