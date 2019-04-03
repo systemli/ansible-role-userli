@@ -17,6 +17,7 @@
       }
     caddy_systemd_network_dependency: false
     caddy_systemd_restart_startlimitinterval: 10
+    caddy_update: false
   tasks:
     - file:
         path: /var/www/
