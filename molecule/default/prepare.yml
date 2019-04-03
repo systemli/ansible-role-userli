@@ -32,7 +32,7 @@
   roles:
     - manala.apt
     - manala.php
-    - manala.mysql
+    - geerlingguy.mysql
   vars:
     manala_apt_repositories:
       - sury_php
