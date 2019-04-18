@@ -30,21 +30,12 @@
   when: not ansible_check_mode
 
 # TODO: Check release tarball PGP signature
-
-- name: make dir for release
-  file:
-    dest: "{{ userli_home }}/userli-{{ userli_version }}"
-    state: directory
-    owner: "{{ userli_user }}"
-    group: "{{ userli_user }}"
-    mode: 0755
-
 # TODO: Chown app files as root:root for better security
 #       Only var/cache and var/log should be owned by userli user
 - name: unarchive release
   unarchive:
     src: "{{ userli_home }}/userli-{{ userli_version }}.tar.gz"
-    dest: "{{ userli_home }}/userli-{{ userli_version }}"
+    dest: "{{ userli_home }}/"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     remote_src: true
