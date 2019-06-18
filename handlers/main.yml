@@ -5,7 +5,7 @@
     name: munin-node
     state: restarted
 
-- name: dump environment for better performance
+- name: "dump environment for better performance"
   command: composer dump-env prod
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -13,3 +13,11 @@
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
   ignore_errors: true
+  notify: adjust permissions for dumped environment file
+
+- name: adjust permissions for dumped environment file
+  file:
+    dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local.php"
+    owner: "{{ userli_user }}"
+    group: "{{ userli_user }}"
+    mode: 0640
