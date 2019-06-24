@@ -1,7 +1,0 @@
-# Disable sudo logging for user 'dovecot' to prevent logging of user passwords
-Defaults:{{ userli_dovecot_user }} !syslog
-Defaults:{{ userli_dovecot_user }} !logfile
-# Allow user '{{ userli_dovecot_user }}' to run some php console commands as user '{{ userli_user }}'
-dovecot ALL=({{ userli_user }}) NOPASSWD: /usr/bin/php {{ userli_symfony_path }}/bin/console app\:users\:check*
-dovecot ALL=({{ userli_user }}) NOPASSWD: /usr/bin/php {{ userli_symfony_path }}/bin/console app\:users\:mailcrypt*
-dovecot ALL=({{ userli_user }}) NOPASSWD: /usr/bin/php {{ userli_symfony_path }}/bin/console app\:users\:quota*
