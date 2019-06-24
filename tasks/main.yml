@@ -11,14 +11,6 @@
     name: "{{ userli_user }}"
     group: "{{ userli_group }}"
 
-- name: ensure userli sudoers file is present
-  template:
-    src: sudoers.d/userli.j2
-    dest: /etc/sudoers.d/userli
-    owner: root
-    group: root
-    mode: 0440
-
 - name: download release
   get_url:
     url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz"
@@ -62,7 +54,7 @@
     src: ".env.local.j2"
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
     owner: "{{ userli_user }}"
-    group: "{{ userli_user }}"
+    group: "{{ userli_dovecot_group }}"
     mode: 0640
   notify: dump environment for better performance
 

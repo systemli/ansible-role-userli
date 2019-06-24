@@ -8,8 +8,8 @@ userli_mysql_priv: "{{ userli_mysql_db }}.*:ALL"
 userli_db_type: mysql
 userli_db_url: "{{ userli_db_type }}://{{ userli_mysql_user }}:{{ userli_mysql_password }}@127.0.0.1:3306/{{ userli_mysql_db }}"
 userli_home: "/var/www/"
-userli_version: "2.2.2"
-userli_sha512_checksum: "b6b15152f77d21584dc027702b3e6056e65b2b58d03a49546778eec57e6c61f12350833e177c9a000a94796b03ae33997a5d6ba10f089b4e64c7d2a6977cdf0e"
+userli_version: "2.2.3"
+userli_sha512_checksum: "57e0063c5437c7bcb7b484c047f6208fb4063f864312e6877b1e98d1564499a813b74c432e076fc5deaae40dd80ea171b25247ceb488ede702e6432e3aab1f82"
 userli_user: "www-data"
 userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/userli"
@@ -19,6 +19,7 @@ userli_update: false
 
 # dovecot user
 userli_dovecot_user: dovecot
+userli_dovecot_group: "{{ userli_dovecot_user }}"
 
 # extra reserved local parts
 userli_extra_reserved_names: []
