@@ -21,6 +21,15 @@
     - not ansible_check_mode
     - cache.rc != 0
 
+- name: adjust permissions for cache directory
+  file:
+    path: "{{ userli_symfony_path}}/var/cache/prod"
+    state: directory
+    owner: "{{ userli_user }}"
+    group: "{{ userli_group }}"
+    mode: u+rw,g+r
+    recurse: True
+
 - name: load default reservedNames into database
   shell: bin/console app:reservednames:import
   args:
