@@ -17,10 +17,6 @@ userli_symfony_path: "{{ userli_home }}/userli"
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
 userli_update: false
 
-# dovecot user
-userli_dovecot_user: dovecot
-userli_dovecot_group: "{{ userli_dovecot_user }}"
-
 # extra reserved local parts
 userli_extra_reserved_names: []
 

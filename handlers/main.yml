@@ -19,5 +19,5 @@
   file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local.php"
     owner: "{{ userli_user }}"
-    group: "{{ userli_dovecot_group }}"
+    group: "{{ userli_user }}"
     mode: 0640
