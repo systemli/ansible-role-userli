@@ -51,9 +51,9 @@
   cron:
     name: "Weekly Report"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env prod"
-    weekday: 1
-    hour: 13
-    minute: 12
+    weekday: '1'
+    hour: '13'
+    minute: '12'
     user: "{{ userli_user }}"
     cron_file: userli
 
