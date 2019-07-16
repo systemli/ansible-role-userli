@@ -85,7 +85,7 @@
     src: "userli-{{ userli_version }}"
 
 - import_tasks: primary.yml
-  when: userli_primary
+  when: userli_primary|bool
 
 - name: ensure lograte config is latest
   template:
@@ -93,8 +93,8 @@
     dest: /etc/logrotate.d/userli
 
 - import_tasks: deployment.yml
-  when: userli_update
+  when: userli_update|bool
 
 - import_tasks: munin.yml
-  when: userli_munin
+  when: userli_munin|bool
   tags: munin
