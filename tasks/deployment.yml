@@ -30,6 +30,15 @@
     mode: u+rw,g+r
     recurse: True
 
+- name: adjust permissions for log directory
+  file:
+    path: "{{ userli_symfony_path}}/var/log/prod"
+    state: directory
+    owner: "{{ userli_user }}"
+    group: "{{ userli_group }}"
+    mode: u+rw,g+rw
+    recurse: True
+
 - name: load default reservedNames into database
   shell: bin/console app:reservednames:import
   args:
