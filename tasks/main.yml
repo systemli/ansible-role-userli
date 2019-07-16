@@ -17,7 +17,7 @@
     dest: "{{ userli_home }}"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
-    checksum: "sha512:{{ userli_sha512_checksum }}"
+    checksum: "sha512:{{ userli_sha512_checksum[userli_version] }}"
   register: userli_download
   when: not ansible_check_mode
 
