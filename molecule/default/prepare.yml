@@ -11,7 +11,7 @@
       gzip
       root /var/www/userli/public
       # PHP-FPM Configuration
-      fastcgi / /run/php/php7.1-fpm.sock php
+      fastcgi / /run/php/php7.3-fpm.sock php
       rewrite {
         to {path} /index.php?{query}
       }
@@ -30,33 +30,28 @@
   hosts: all
   become: true
   roles:
-    - manala.apt
-    - manala.php
-    - geerlingguy.mysql
+    - weareinteractive.apt
+    - geerlingguy.php
+    - mejo-.mariadb
   vars:
-    manala_apt_repositories:
-      - sury_php
-    manala_apt_repositories_exclusive: false
-    manala_apt_preferences:
-      - php@sury_php
-    manala_apt_packages:
+    apt_packages:
       - acl  # support for unpriviledged become_user
       - unzip
-    manala_php_version: 7.1
-    manala_php_extensions:
+    php_default_version_debian: 7.3
+    php_packages:
       # necessary
-      - apcu
-      - curl
-      - gd
-      - sodium
-      - mbstring
-      - mysql
-      - xml
-      - zip
+      - php{{ php_default_version_debian }}-apcu
+      - php{{ php_default_version_debian }}-cli
+      - php{{ php_default_version_debian }}-curl
+      - php{{ php_default_version_debian }}-fpm
+      - php{{ php_default_version_debian }}-gd
+      - php{{ php_default_version_debian }}-mbstring
+      - php{{ php_default_version_debian }}-mysql
+      - php{{ php_default_version_debian }}-xml
+      - php{{ php_default_version_debian }}-zip
       # performance
-      - ctype
-      - intl
-    manala_php_extensions_exclusive: false
-    manala_php_sapis:
-      - cli
-      - fpm
+      - php{{ php_default_version_debian }}-ctype
+      - php{{ php_default_version_debian }}-intl
+      # debugging
+      - php{{ php_default_version_debian }}-xdebug
+    php_webserver_daemon: caddy

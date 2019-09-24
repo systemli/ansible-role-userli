@@ -32,7 +32,7 @@ and their translations.
 Dependencies
 ------------
 
-There are now fixed dependencies, but you need PHP >= 7.1, a webserver and a database.
+There are no fixed dependencies, but you need PHP >= 7.1, a webserver and a database.
 See `molecule/default/prepare.yml` for an example setup.
 
 Example Playbook
