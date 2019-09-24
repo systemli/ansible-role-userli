@@ -1,45 +1,26 @@
 ---
-
-- name: Install Caddy
-  hosts: all
-  become: true
-  roles:
-    - antoiner77.caddy
-  vars:
-    caddy_config: |
-      :8080
-      gzip
-      root /var/www/userli/public
-      # PHP-FPM Configuration
-      fastcgi / /run/php/php7.3-fpm.sock php
-      rewrite {
-        to {path} /index.php?{query}
-      }
-    caddy_systemd_network_dependency: false
-    caddy_systemd_restart_startlimitinterval: 10
-    caddy_update: false
-  tasks:
-    - file:
-        path: /var/www/
-        owner: www-data
-        group: www-data
-        mode: 0777
-        state: directory
-
 - name: Prepare
   hosts: all
   become: true
   roles:
     - weareinteractive.apt
+    - geerlingguy.apache
     - geerlingguy.php
     - mejo-.mariadb
   vars:
+    apache_vhosts:
+      - servername: userli.dev
+        serveralias: www.userli.dev
+        documentroot: /var/www/userli/public
+        extra_parameters: |
+          SetEnv APP_ENV prod
     apt_packages:
       - acl  # support for unpriviledged become_user
       - unzip
     php_default_version_debian: 7.3
     php_packages:
       # necessary
+      - libapache2-mod-php
       - php{{ php_default_version_debian }}-apcu
       - php{{ php_default_version_debian }}-cli
       - php{{ php_default_version_debian }}-curl
@@ -54,4 +35,3 @@
       - php{{ php_default_version_debian }}-intl
       # debugging
       - php{{ php_default_version_debian }}-xdebug
-    php_webserver_daemon: caddy
