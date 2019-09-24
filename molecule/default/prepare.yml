@@ -8,9 +8,10 @@
     - geerlingguy.php
     - mejo-.mariadb
   vars:
+    apache_listen_port: 8080
+    apache_remove_default_vhost: true
     apache_vhosts:
-      - servername: userli.dev
-        serveralias: www.userli.dev
+      - servername: localhost
         documentroot: /var/www/userli/public
         extra_parameters: |
           SetEnv APP_ENV prod
