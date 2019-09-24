@@ -1,0 +1,6 @@
+---
+http:
+  http://localhost:8080/en/:
+    status: 200
+    body:
+      - "Here you can set up and manage your email account"
