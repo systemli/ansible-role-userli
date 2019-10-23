@@ -2,4 +2,4 @@
 - src: weareinteractive.apt
 - src: geerlingguy.apache
 - src: geerlingguy.php
-- src: mejo-.mariadb
+- src: systemli.mariadb
