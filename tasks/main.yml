@@ -83,6 +83,7 @@
     state: link
     path: "{{ userli_symfony_path }}"
     src: "userli-{{ userli_version }}"
+  notify: restart webserver
 
 - import_tasks: primary.yml
   when: userli_primary|bool
