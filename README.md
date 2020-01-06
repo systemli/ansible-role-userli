@@ -29,6 +29,8 @@ Role Variables
 Add files to `translations` or `userli/translations` to override the default strings
 and their translations.
 
+See `defaults/main.yml` for available role variables.
+
 Dependencies
 ------------
 

@@ -31,3 +31,4 @@ userli_env_vars:
 userli_munin: false
 
 userli_primary: true
+userli_webserver: apache2
