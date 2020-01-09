@@ -1,6 +1,7 @@
 ---
 
 galaxy_info:
+  role_name: userli
   author: systemli
   description: |
     This role installs Userli, a web application to (self-) manage email users
