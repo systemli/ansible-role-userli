@@ -36,8 +36,7 @@
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: u+rw,g+rw
-    recurse: True
+    mode: u+rw,g+rws
 
 - name: load default reservedNames into database
   shell: bin/console app:reservednames:import
