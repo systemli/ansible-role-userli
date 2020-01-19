@@ -6,6 +6,6 @@
 	delaycompress
 	notifempty
 	copytruncate
-	create 644 {{ userli_user }} {{ userli_group }}
+	create 664 {{ userli_user }} {{ userli_group }}
 	su {{ userli_user }} {{ userli_group }}
 }

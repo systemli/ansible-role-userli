@@ -36,7 +36,20 @@
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: u+rw,g+rws
+    mode: 2775
+
+- name: detect if prod.log exists
+  stat:
+    path: "{{ userli_symfony_path }}/var/log/prod.log"
+  register: __userli_prod_log
+
+- name: create or adjust permissions for prod.log
+  file:
+    path: "{{ userli_symfony_path }}/var/log/prod.log"
+    owner: "{{ userli_user }}"
+    group: "{{ userli_group }}"
+    mode: 0664
+    state: "{{ 'file' if __userli_prod.log.stat.exists else 'touch' }}"
 
 - name: load default reservedNames into database
   shell: bin/console app:reservednames:import
