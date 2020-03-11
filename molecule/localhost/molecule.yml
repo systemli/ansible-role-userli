@@ -1,7 +1,4 @@
 ---
-scenario:
-  name: localhost
-
 dependency:
   name: galaxy
   options:
@@ -20,10 +17,7 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    enabled: false
   playbooks:
     prepare: ../default/prepare.yml
-    converge: ../default/playbook.yml
+    converge: ../default/converge.yml
     verify: ../default/verify.yml

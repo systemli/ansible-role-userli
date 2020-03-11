@@ -1,7 +1,4 @@
 ---
-scenario:
-  name: docker
-
 dependency:
   name: galaxy
   options:
@@ -20,18 +17,15 @@ platforms:
     privileged: true
     pre_build_image: true
 
+lint: yamllint .
+
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    enabled: false
   playbooks:
     prepare: ../default/prepare.yml
-    converge: ../default/playbook.yml
+    converge: ../default/converge.yml
     verify: ../default/verify.yml
 
 verifier:
   name: goss
   directory: ../default/tests/
-  lint:
-    name: yamllint
