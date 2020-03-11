@@ -8,6 +8,7 @@
     collation: "utf8_general_ci"
     login_user: root
     login_password: "{{ userli_mysql_root_password }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
   register: database_creation
 
 - name: ensure mysql user is present
@@ -18,6 +19,7 @@
     host: "localhost"
     login_user: root
     login_password: "{{ userli_mysql_root_password }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: allow mysql users from secondary instance
   mysql_user:
@@ -27,6 +29,7 @@
     host: "{{ item.host }}"
     login_user: root
     login_password: "{{ userli_mysql_root_password }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
 
