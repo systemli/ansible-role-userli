@@ -7,4 +7,3 @@
     - ansible-role-userli
   vars:
     userli_mysql_password: userli
-    userli_mysql_root_password: root
