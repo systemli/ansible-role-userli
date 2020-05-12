@@ -31,3 +31,6 @@ userli_munin: false
 
 userli_primary: true
 userli_webserver: apache2
+
+# https://github.com/ansible/ansible/pull/63097/files
+ansible_python_interpreter: /usr/bin/python3
