@@ -49,7 +49,7 @@
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
     mode: 0664
-    state: "{{ 'file' if __userli_prod.log.stat.exists else 'touch' }}"
+    state: "{{ 'file' if __userli_prod_log.stat.exists else 'touch' }}"
 
 - name: load default reservedNames into database
   shell: bin/console app:reservednames:import
