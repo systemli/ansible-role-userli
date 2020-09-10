@@ -36,7 +36,7 @@
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: 2775
+    mode: 04755
 
 - name: detect if prod.log exists
   stat:
