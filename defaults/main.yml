@@ -7,10 +7,12 @@ userli_mysql_priv: "{{ userli_mysql_db }}.*:ALL"
 userli_db_type: mysql
 userli_db_url: "{{ userli_db_type }}://{{ userli_mysql_user }}:{{ userli_mysql_password }}@127.0.0.1:3306/{{ userli_mysql_db }}"
 userli_home: "/var/www/"
-userli_version: "2.6.1"
+userli_version: "2.7.0"
 userli_user: "www-data"
 userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/userli"
+userli_wkd_directory: "/var/www/html"
+userli_wkd_format: "advanced" # or 'advanced' or 'direct'
 
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
 userli_update: false
@@ -25,6 +27,10 @@ userli_env_vars:
     value: 'prod'
   - name: APP_SECRET
     value: 'OVERRIDE_ME!'
+  - name: WKD_DIRECTORY
+    value: '{{ userli_wkd_directory }}'
+  - name: WKD_FORMAT
+    value: '{{ userli_wkd_format }}'
 
 # munin integration
 userli_munin: false
