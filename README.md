@@ -11,7 +11,7 @@ Requirements
 ------------
 
   * composer
-  * PHP >= 7.1
+  * PHP >= 7.3
   * php-apcu
   * php-curl
   * php-gd
@@ -34,7 +34,7 @@ See `defaults/main.yml` for available role variables.
 Dependencies
 ------------
 
-There are no fixed dependencies, but you need PHP >= 7.1, a webserver and a database.
+There are no fixed dependencies, but you need PHP, a webserver and a database.
 See `molecule/default/prepare.yml` for an example setup.
 
 Example Playbook
