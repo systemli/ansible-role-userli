@@ -8,7 +8,7 @@ env:
 
 install:
   # Install test dependencies.
-  - pip install molecule-goss PyMySQL yamllint ansible-lint docker
+  - pip install molecule-goss PyMySQL yamllint ansible-lint molecule[docker]
 
 script:
   - molecule test -s docker
