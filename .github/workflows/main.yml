@@ -3,8 +3,6 @@ name: CI
 'on':
   pull_request:
   push:
-    branches:
-      - master
 
 jobs:
 
@@ -26,7 +24,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install molecule[docker] yamllint ansible-lint
+        run: pip3 install ansible-lint molecule[docker] molecule-goss PyMySQL yamllint 
 
       - name: Run Molecule tests.
         run: molecule test -s docker
@@ -34,4 +32,3 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
-        working-directory: molecule
