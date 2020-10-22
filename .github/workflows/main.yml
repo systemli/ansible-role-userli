@@ -1,6 +1,6 @@
 ---
-name: CI
-'on':
+name: Molecule
+on:
   pull_request:
   push:
 
@@ -8,7 +8,7 @@ jobs:
 
   test:
     name: Molecule
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         distro:
