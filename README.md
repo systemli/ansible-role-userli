@@ -1,7 +1,7 @@
 ansible-role-userli
 ==================
 
-[![Build Status](https://travis-ci.org/systemli/ansible-role-userli.svg?branch=master)](https://travis-ci.org/systemli/ansible-role-userli)
+[![Build Status](https://github.com/systemli/ansible-role-userli/workflows/Molecule/badge.svg?branch=master)](https://github.com/systemli/ansible-role-userli/actions?query=workflow%3AIntegration)
 
 This role installs Userli, a web application to (self-) manage email users
 and encrypt their mailboxes. Find more information at
@@ -42,14 +42,21 @@ Example Playbook
 
 See `molecule/default/playbook.yml` for an example playbook.
 
+Testing & Development
+---------------------
+
 Tests
 -----
 
-Run local tests with
+For developing and testing the role we use Github Actions, Molecule, and Vagrant. On the local environment you can easily test the role with
 
-    molecule test
+Run local tests with:
 
-Requires Molecule, Vagrant and `python-vagrant` to be installed.
+```
+molecule test
+```
+
+Requires Molecule, Vagrant and `python-vagrant` to be installed.For developing and testing the role we use Travis CI, Molecule and Vagrant. On the local environment you can easily test the role with
 
 License
 -------
