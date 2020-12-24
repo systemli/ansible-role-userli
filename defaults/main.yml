@@ -12,7 +12,7 @@ userli_user: "www-data"
 userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/userli"
 userli_wkd_directory: "/var/www/html"
-userli_wkd_format: "advanced" # or 'advanced' or 'direct'
+userli_wkd_format: "advanced"  # or 'advanced' or 'direct'
 
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
 userli_update: false
