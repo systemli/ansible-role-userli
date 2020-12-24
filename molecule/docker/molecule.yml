@@ -24,8 +24,8 @@ provisioner:
   playbooks:
     prepare: ../default/prepare.yml
     converge: ../default/converge.yml
-    verify: ../default/verify.yml
+#    verify: ../default/verify.yml
 
-verifier:
-  name: goss
-  directory: ../default/tests/
+#verifier:
+#  name: goss
+#  directory: ../default/tests/
