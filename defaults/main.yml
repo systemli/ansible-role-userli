@@ -39,7 +39,7 @@ userli_primary: true
 userli_webserver: apache2
 
 # Set default language for navbar
-userli_services_locale: "en"
+userli_parameters_locale: "en"
 
 # https://github.com/ansible/ansible/pull/63097/files
 ansible_python_interpreter: /usr/bin/python3
