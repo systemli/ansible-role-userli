@@ -23,5 +23,5 @@ provisioner:
   name: ansible
   become: true
 
-# verifier:
-#   name: goss
+verifier:
+  name: goss
