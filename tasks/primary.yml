@@ -53,6 +53,7 @@
     minute: '12'
     user: "{{ userli_user }}"
     cron_file: userli
+    state: "{{ userli_cron_weekly }}"
 
 - name: ensure old redeemed vouchers are unlinked
   cron:
