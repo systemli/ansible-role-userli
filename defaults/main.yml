@@ -41,5 +41,8 @@ userli_webserver: apache2
 # Set default language for navbar
 userli_parameters_locale: "en"
 
+# send weekly mail about newly registred accounts
+userli_cron_weekly: present
+
 # https://github.com/ansible/ansible/pull/63097/files
 ansible_python_interpreter: /usr/bin/python3
