@@ -39,9 +39,9 @@
 - name: ensure deleted users are purged daily
   cron:
     name: "Purge deleted mail users"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove -q --env prod"
+    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove -q"
     special_time: "daily"
-    user: "{{ userli_user }}"
+    user: root
     cron_file: userli
 
 - name: ensure weekly report job is latest
