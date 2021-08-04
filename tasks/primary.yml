@@ -36,18 +36,42 @@
   become_user: "{{ userli_user }}"
   when: database_creation.changed
 
-- name: ensure deleted users are purged daily
+- name: create directory for user maildir removal list
+  file:
+    dest: "/usr/local/share/userli"
+    state: directory
+    owner: "{{ userli_user }}"
+    group: "{{ userli_maildir_group }}"
+    mode: 0750
+
+- name: copy script to remove maildirs of deleted users
+  template:
+    src: "userli-maildirs-remove.sh.j2"
+    dest: "/usr/local/bin/userli-maildirs-remove.sh"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: ensure deleted users are purged daily #1
   cron:
-    name: "Purge deleted mail users"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove -q --env prod"
+    name: "List maildirs of deleted mail users"
+    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove --list --env=prod >/usr/local/share/userli/maildirs-remove.txt"
     special_time: "daily"
     user: "{{ userli_user }}"
+    cron_file: userli
+
+- name: ensure deleted users are purged daily #2
+  cron:
+    name: "Remove maildirs of deleted mail users"
+    job: "/usr/local/bin/userli-maildirs-remove.sh"
+    special_time: "daily"
+    user: "{{ userli_maildir_user }}"
     cron_file: userli
 
 - name: ensure weekly report job is latest
   cron:
     name: "Weekly Report"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env prod"
+    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env=prod"
     weekday: '1'
     hour: '13'
     minute: '12'

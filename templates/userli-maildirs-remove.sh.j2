@@ -1,0 +1,18 @@
+#!/bin/sh
+
+listfile="/usr/local/share/userli/maildirs-remove.txt"
+debug="yes"
+
+if [ ! -f "$listfile" ]; then
+    echo "Error: $listfile not found" >&2
+    exit 1
+fi
+
+while read maildir; do
+    if [ "x${maildir##/var/vmail}" = "x$maildir" ]; then
+        echo "Error: $maildir doesn't start with /var/vmail" >&2
+        continue
+    fi
+    [ "$debug" = "yes" -a -d "$maildir" ] && echo "Info: removed $maildir"
+    [ -d "$maildir" ] && rm -r "$maildir"
+done <"$listfile"
