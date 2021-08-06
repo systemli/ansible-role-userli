@@ -7,7 +7,7 @@ userli_mysql_priv: "{{ userli_mysql_db }}.*:ALL"
 userli_db_type: mysql
 userli_db_url: "{{ userli_db_type }}://{{ userli_mysql_user }}:{{ userli_mysql_password }}@127.0.0.1:3306/{{ userli_mysql_db }}"
 userli_home: "/var/www/"
-userli_version: "2.7.14"
+userli_version: "2.7.15"
 userli_user: "www-data"
 userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/userli"
