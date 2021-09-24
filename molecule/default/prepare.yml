@@ -2,6 +2,15 @@
 - name: Prepare
   hosts: all
   become: true
+  pre_tasks:
+    - name: Run the equivalent of "apt-get update" before installing packages
+      apt:
+        update_cache: yes
+
+    - name: Install cron for testing in docker containers
+      apt:
+        pkg: cron
+        update_cache: yes
   roles:
     - weareinteractive.apt
     - geerlingguy.apache
@@ -18,7 +27,7 @@
     apt_packages:
       - acl  # support for unpriviledged become_user
       - unzip
-    php_default_version_debian: 7.3
+    php_default_version_debian: "{% if ansible_distribution_release == 'buster' %}7.3{% else %}7.4{% endif %}"
     php_packages:
       # necessary
       - libapache2-mod-php
