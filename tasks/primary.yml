@@ -78,6 +78,7 @@
     user: "{{ userli_user }}"
     cron_file: userli
     state: "{{ userli_cron_weekly }}"
+  when: userli_cron_weekly != "absent"  # dirty fiy, but ansible otherwise removes all tasks
 
 - name: ensure old redeemed vouchers are unlinked
   cron:
