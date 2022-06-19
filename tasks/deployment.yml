@@ -1,7 +1,6 @@
 ---
-
 - name: clear and warmup cache
-  shell: bin/console cache:clear && bin/console cache:warmup
+  command: bin/console cache:clear && bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -11,7 +10,7 @@
   register: cache
 
 - name: handle cache:clear errors
-  shell: rm -rf var/cache/prod && bin/console cache:warmup
+  command: rm -rf var/cache/prod && bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -52,7 +51,7 @@
     - prod.deprecations.log
 
 - name: load default reservedNames into database
-  shell: bin/console app:reservednames:import
+  command: bin/console app:reservednames:import
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -60,7 +59,7 @@
   become_user: "{{ userli_user }}"
 
 - name: load custom reservedNames into database
-  shell: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
+  command: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
     | bin/console app:reservednames:import --file=-'
   args:
     chdir: "{{ userli_symfony_path }}"

@@ -1,5 +1,4 @@
 ---
-
 - name: ensure munin plugins from userli are linked
   file:
     src: "{{ userli_symfony_path }}/bin/{{ item }}"

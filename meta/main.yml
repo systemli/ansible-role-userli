@@ -1,5 +1,4 @@
 ---
-
 galaxy_info:
   role_name: userli
   author: systemli
@@ -9,7 +8,7 @@ galaxy_info:
     https://systemli.github.io/userli/.
   company: systemli.org
   license: GPLv3
-  min_ansible_version: 2.5.1
+  min_ansible_version: "2.5.1"
   platforms:
     - name: Debian
       versions:

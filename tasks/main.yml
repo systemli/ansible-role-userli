@@ -1,5 +1,4 @@
 ---
-
 - import_tasks: dependencies.yml
 
 - name: ensure group is present
@@ -18,6 +17,7 @@
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     checksum: "sha512:{{ userli_sha512_checksum[userli_version] }}"
+    mode: 0644
   register: userli_download
   when: not ansible_check_mode
 
@@ -52,7 +52,7 @@
 - name: ensure .env.local is installed
   template:
     src: ".env.local.j2"
-    dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
+    dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0640
@@ -60,7 +60,7 @@
 
 - name: ensure extra directories are latest
   file:
-    dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
+    dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
@@ -71,7 +71,7 @@
 - name: ensure extra files are latest
   copy:
     src: "{{ item.src }}"
-    dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
+    dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0644
@@ -92,6 +92,7 @@
   template:
     src: logrotate.conf.j2
     dest: /etc/logrotate.d/userli
+    mode: 0644
 
 - import_tasks: deployment.yml
   when: userli_update|bool
