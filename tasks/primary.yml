@@ -1,5 +1,4 @@
 ---
-
 - name: ensure database is present
   mysql_db:
     name: "{{ userli_mysql_db }}"
@@ -11,7 +10,7 @@
 
 - name: ensure mysql user is present
   mysql_user:
-    name: "{{ userli_mysql_user }}"
+    name: "{{ userli_mysql_user }}"
     password: "{{ userli_mysql_password }}"
     priv: "{{ userli_mysql_priv }}"
     host: "localhost"
@@ -28,7 +27,7 @@
   when: userli_secondary_users is defined
 
 - name: create default database schema
-  shell: bin/console doctrine:schema:create
+  command: bin/console doctrine:schema:create
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -72,13 +71,13 @@
   cron:
     name: "Weekly Report"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env=prod"
-    weekday: '1'
-    hour: '13'
-    minute: '12'
+    weekday: "1"
+    hour: "13"
+    minute: "12"
     user: "{{ userli_user }}"
     cron_file: userli
     state: "{{ userli_cron_weekly }}"
-  when: userli_cron_weekly != "absent"  # dirty fiy, but ansible otherwise removes all tasks
+  when: userli_cron_weekly != "absent" # dirty fiy, but ansible otherwise removes all tasks
 
 - name: ensure old redeemed vouchers are unlinked
   cron:
