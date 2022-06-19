@@ -15,6 +15,7 @@ jobs:
     name: Integration
     uses: systemli/github-ansible-workflow/.github/workflows/ansible-integration-workflow.yaml@main
     with:
+      disable-apparmor: true
       distros: '[ "debian11", "debian10" ]'
       role-dependencies: |
         - src: weareinteractive.apt
