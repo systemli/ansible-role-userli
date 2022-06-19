@@ -50,3 +50,5 @@ ansible_python_interpreter: /usr/bin/python3
 userli_maildir_user: "mail"
 userli_maildir_group: "mail"
 userli_maildir_location: "/var/vmail"
+
+userli_directory: userli/

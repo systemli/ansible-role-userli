@@ -8,9 +8,16 @@
   become_user: "{{ userli_user }}"
   ignore_errors: true
   register: cache
+  changed_when: cache.rc != 0
+  failed_when: cache.rc != 0
 
-- name: handle cache:clear errors
-  command: rm -rf var/cache/prod && bin/console cache:warmup
+- name: clear cache
+  file:
+    path: "var/cache/prod"
+    state: absent
+
+- name: warmup cache
+  command: bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -57,6 +64,9 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
+  register: reserved_names
+  changed_when: reservedNames.rc != 0
+  failed_when: reservedNames.rc != 0
 
 - name: load custom reservedNames into database
   command: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
@@ -66,3 +76,6 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
+  register: reserved_names
+  changed_when: reservedNames.rc != 0
+  failed_when: reservedNames.rc != 0

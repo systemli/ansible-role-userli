@@ -65,7 +65,7 @@
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0755
-  with_filetree: userli/
+  with_community.general.filetree: "{{ userli_directory }}"
   when: item.state == 'directory'
 
 - name: ensure extra files are latest
@@ -75,7 +75,7 @@
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0644
-  with_filetree: userli/
+  with_community.general.filetree: "{{ userli_directory }}"
   when: item.state == 'file'
 
 - name: set link to current release
