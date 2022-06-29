@@ -11,7 +11,7 @@ Requirements
 ------------
 
   * composer
-  * PHP >= 7.3
+  * PHP >= 8.0
   * php-apcu
   * php-curl
   * php-gd
@@ -42,9 +42,6 @@ Example Playbook
 
 See `molecule/default/playbook.yml` for an example playbook.
 
-Testing & Development
----------------------
-
 Tests
 -----
 
@@ -55,8 +52,6 @@ Run local tests with:
 ```
 molecule test
 ```
-
-Requires Molecule, Vagrant and `python-vagrant` to be installed.For developing and testing the role we use Travis CI, Molecule and Vagrant. On the local environment you can easily test the role with
 
 License
 -------
