@@ -20,7 +20,7 @@ jobs:
     uses: systemli/github-ansible-workflow/.github/workflows/ansible-integration-workflow.yaml@main
     with:
       disable-apparmor-mysql: true
-      distros: '[ "debian11", "debian10" ]'
+      distros: '[ "debian11" ]'
       role-dependencies: |
         - src: weareinteractive.apt
         - src: geerlingguy.apache
