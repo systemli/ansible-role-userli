@@ -20,11 +20,9 @@ jobs:
     uses: systemli/github-ansible-workflow/.github/workflows/ansible-integration-workflow.yaml@main
     with:
       disable-apparmor-mysql: true
-      distros: '[ "debian11" ]'
+      distros: '[ "debian11", "debian10" ]'
       role-dependencies: |
         - src: weareinteractive.apt
         - src: geerlingguy.apache
         - src: geerlingguy.php
         - src: systemli.mariadb
-    secrets:
-      galaxy-token: ${{ secrets.galaxy_api_key }}
