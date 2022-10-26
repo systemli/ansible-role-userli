@@ -64,9 +64,9 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
-  register: reserved_names
-  changed_when: reservedNames.rc != 0
-  failed_when: reservedNames.rc != 0
+  register: __userli_reserved_names
+  changed_when: __userli_reserved_names.rc != 0
+  failed_when: __userli_reserved_names.rc != 0
 
 - name: load custom reservedNames into database
   command: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
@@ -76,6 +76,6 @@
   environment:
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
-  register: reserved_names
-  changed_when: reservedNames.rc != 0
-  failed_when: reservedNames.rc != 0
+  register: __userli_reserved_names
+  changed_when: __userli_reserved_names.rc != 0
+  failed_when: __userli_reserved_names.rc != 0
