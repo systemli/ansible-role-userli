@@ -1,0 +1,12 @@
+[Unit]
+Description=Userli Prometheus Textfile Collector
+After=systemd-modules-load.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'php {{ userli_symfony_path }}/bin/console app:metrics | sponge {{ userli_prometheus_textfile_collector_path }}/userli.prom'
+SyslogIdentifier=userli-textfile-collector
+
+[Install]
+WantedBy=multi-user.target

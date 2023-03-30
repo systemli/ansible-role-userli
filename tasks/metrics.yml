@@ -1,0 +1,23 @@
+---
+- name: Copy Textfile Collector Service
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemd daemon
+    - restart userli-collector
+  loop:
+    - userli-collector.service
+    - userli-collector.timer
+
+- name: Enable Textfile Collector Service
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - userli-collector.service
+    - userli-collector.timer

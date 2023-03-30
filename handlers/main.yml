@@ -1,5 +1,4 @@
 ---
-
 - name: restart munin-node
   service:
     name: munin-node
@@ -26,3 +25,15 @@
   service:
     name: "{{ userli_webserver }}"
     state: restarted
+
+- name: reload systemd daemon
+  systemd:
+    daemon_reload: true
+
+- name: restart userli-collector
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - userli-collector.service
+    - userli-collector.timer
