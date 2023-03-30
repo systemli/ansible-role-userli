@@ -6,5 +6,5 @@
     - ansible-role-userli
   vars:
     userli_mysql_password: userli
-    userli_munin: true
+    userli_munin: True
     userli_prometheus_textfile_collector_enabled: True

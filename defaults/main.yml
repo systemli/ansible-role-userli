@@ -14,7 +14,7 @@ userli_wkd_directory: "/var/www/html"
 userli_wkd_format: "advanced" # or 'advanced' or 'direct'
 
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
-userli_update: false
+userli_update: False
 
 # extra reserved local parts
 userli_extra_reserved_names: []
@@ -36,9 +36,9 @@ userli_prometheus_textfile_collector_path: "/var/lib/prometheus/node-exporter"
 userli_prometheus_textfile_collector_on_calendar: "*-*-* *:*:00"
 
 # munin integration
-userli_munin: false
+userli_munin: True
 
-userli_primary: true
+userli_primary: True
 userli_webserver: apache2
 
 # Set default language for navbar
