@@ -1,6 +1,7 @@
 ---
 - name: Restart munin-node
   ansible.builtin.service:
+  service:
     name: munin-node
     state: restarted
 
@@ -26,3 +27,15 @@
   ansible.builtin.service:
     name: "{{ userli_webserver }}"
     state: restarted
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: true
+
+- name: Restart userli-collector
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - userli-collector.service
+    - userli-collector.timer
