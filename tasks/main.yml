@@ -1,5 +1,6 @@
 ---
-- import_tasks: dependencies.yml
+- name: Import dependency tasks
+  import_tasks: dependencies.yml
 
 - name: ensure group is present
   group:
@@ -85,7 +86,8 @@
     src: "userli-{{ userli_version }}"
   notify: restart webserver
 
-- import_tasks: primary.yml
+- name: Import tasks for primary server
+  import_tasks: primary.yml
   when: userli_primary|bool
 
 - name: ensure lograte config is latest
@@ -94,13 +96,16 @@
     dest: /etc/logrotate.d/userli
     mode: 0644
 
-- import_tasks: deployment.yml
+- name: Import deployment-only tasks
+  import_tasks: deployment.yml
   when: userli_update|bool
 
-- import_tasks: metrics.yml
+- name: Import metrics tasks
+  import_tasks: metrics.yml
   when: userli_prometheus_textfile_collector_enabled|bool
   tags: metrics
 
-- import_tasks: munin.yml
+- name: Import munin tasks
+  import_tasks: munin.yml
   when: userli_munin|bool
   tags: munin
