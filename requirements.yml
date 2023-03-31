@@ -1,4 +1,7 @@
 ---
+collections:
+  - community.general
+
 roles:
   - geerlingguy.apache
   - geerlingguy.php
