@@ -1,10 +1,10 @@
 ---
-- name: restart munin-node
+- name: Restart munin-node
   service:
     name: munin-node
     state: restarted
 
-- name: "dump environment for better performance"
+- name: "Dump environment for better performance"
   command: composer dump-env prod
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -12,25 +12,25 @@
     APP_ENV: "prod"
   become_user: "{{ userli_user }}"
   ignore_errors: true
-  notify: adjust permissions for dumped environment file
+  notify: Adjust permissions for dumped environment file
 
-- name: adjust permissions for dumped environment file
+- name: Adjust permissions for dumped environment file
   file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local.php"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0640
 
-- name: restart webserver
+- name: Restart webserver
   service:
     name: "{{ userli_webserver }}"
     state: restarted
 
-- name: reload systemd daemon
+- name: Reload systemd daemon
   systemd:
     daemon_reload: true
 
-- name: restart userli-collector
+- name: Restart userli-collector
   service:
     name: "{{ item }}"
     state: restarted

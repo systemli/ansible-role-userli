@@ -7,8 +7,8 @@
     group: root
     mode: 0644
   notify:
-    - reload systemd daemon
-    - restart userli-collector
+    - Reload systemd daemon
+    - Restart userli-collector
   loop:
     - userli-collector.service
     - userli-collector.timer
