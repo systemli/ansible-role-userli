@@ -105,5 +105,5 @@
   when: userli_munin | bool
 
 - name: Import metrics tasks
-  import_tasks: metrics.yml
+  ansible.builtin.import_tasks: metrics.yml
   when: userli_prometheus_textfile_collector_enabled | bool

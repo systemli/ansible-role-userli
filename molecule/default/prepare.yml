@@ -4,13 +4,12 @@
   become: true
   pre_tasks:
     - name: Run the equivalent of "apt-get update" before installing packages
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
 
     - name: Install cron for testing in docker containers
-      apt:
+      ansible.builtin.apt:
         pkg: cron
-        update_cache: yes
   roles:
     - weareinteractive.apt
     - geerlingguy.apache
@@ -25,7 +24,7 @@
         extra_parameters: |
           SetEnv APP_ENV prod
     apt_packages:
-      - acl  # support for unpriviledged become_user
+      - acl # support for unpriviledged become_user
       - unzip
     php_default_version_debian: "{% if ansible_distribution_release == 'bullseye' %}7.4{% else %}8.2{% endif %}"
     php_packages:
