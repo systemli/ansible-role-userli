@@ -1,0 +1,6 @@
+---
+roles:
+  - geerlingguy.apache
+  - geerlingguy.php
+  - systemli.mariadb
+  - weareinteractive.apt
