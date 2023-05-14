@@ -1,5 +1,5 @@
 ---
-- name: clear and warmup cache
+- name: Clear and warmup cache
   command: bin/console cache:clear && bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -11,12 +11,12 @@
   changed_when: cache.rc != 0
   failed_when: cache.rc != 0
 
-- name: clear cache
+- name: Clear cache
   file:
     path: "var/cache/prod"
     state: absent
 
-- name: warmup cache
+- name: Warmup cache  # noqa no-changed-when
   command: bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -27,7 +27,7 @@
     - not ansible_check_mode
     - cache.rc != 0
 
-- name: adjust permissions for cache directory
+- name: Adjust permissions for cache directory
   file:
     path: "{{ userli_symfony_path }}/var/cache/prod"
     state: directory
@@ -36,7 +36,7 @@
     mode: u+rw,g+r
     recurse: True
 
-- name: adjust permissions for log directory
+- name: Adjust permissions for log directory
   file:
     path: "{{ userli_symfony_path }}/var/log"
     state: directory
@@ -44,7 +44,7 @@
     group: "{{ userli_group }}"
     mode: 04755
 
-- name: create or adjust permissions for prod.log
+- name: Create or adjust permissions for prod.log
   file:
     path: "{{ userli_symfony_path }}/var/log/{{ item }}"
     owner: "{{ userli_user }}"
@@ -57,7 +57,7 @@
     - prod.log
     - prod.deprecations.log
 
-- name: load default reservedNames into database
+- name: Load default reservedNames into database
   command: bin/console app:reservednames:import
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -68,8 +68,8 @@
   changed_when: __userli_reserved_names.rc != 0
   failed_when: __userli_reserved_names.rc != 0
 
-- name: load custom reservedNames into database
-  command: 'echo "{{ userli_extra_reserved_names|join("\n") }}"
+- name: Load custom reservedNames into database
+  command: 'echo "{{ userli_extra_reserved_names | join("\n") }}"
     | bin/console app:reservednames:import --file=-'
   args:
     chdir: "{{ userli_symfony_path }}"

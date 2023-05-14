@@ -1,16 +1,16 @@
 ---
-- name: ensure munin plugins from userli are linked
+- name: Ensure munin plugins from userli are linked
   file:
     src: "{{ userli_symfony_path }}/bin/{{ item }}"
     dest: "/etc/munin/plugins/{{ item }}"
     state: link
-  notify: restart munin-node
+  notify: Restart munin-node
   with_items:
     - user-accounts
     - user-aliases
     - user-vouchers
 
-- name: ensure user plugin config is present
+- name: Ensure user plugin config is present
   template:
     src: user.munin.j2
     dest: /etc/munin/plugin-conf.d/user

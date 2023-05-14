@@ -1,5 +1,5 @@
 ---
-- name: ensure database is present
+- name: Ensure database is present
   community.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
     state: present
@@ -8,7 +8,7 @@
     login_unix_socket: /run/mysqld/mysqld.sock
   register: database_creation
 
-- name: ensure mysql user is present
+- name: Ensure mysql user is present
   community.mysql.mysql_user:
     name: "{{ userli_mysql_user }}"
     password: "{{ userli_mysql_password }}"
@@ -16,7 +16,7 @@
     host: "localhost"
     login_unix_socket: /run/mysqld/mysqld.sock
 
-- name: allow mysql users from secondary instance
+- name: Allow mysql users from secondary instance
   community.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
@@ -26,7 +26,7 @@
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
 
-- name: create default database schema
+- name: Create default database schema  # noqa no-changed-when
   command: bin/console doctrine:schema:create
   args:
     chdir: "{{ userli_symfony_path }}"
@@ -35,7 +35,7 @@
   become_user: "{{ userli_user }}"
   when: database_creation.changed
 
-- name: create directory for user maildir removal list
+- name: Create directory for user maildir removal list
   file:
     dest: "/usr/local/share/userli"
     state: directory
@@ -43,7 +43,7 @@
     group: "{{ userli_maildir_group }}"
     mode: 0750
 
-- name: copy script to remove maildirs of deleted users
+- name: Copy script to remove maildirs of deleted users
   template:
     src: "userli-maildirs-remove.sh.j2"
     dest: "/usr/local/bin/userli-maildirs-remove.sh"
@@ -51,7 +51,7 @@
     group: root
     mode: 0755
 
-- name: ensure deleted users are purged daily #1
+- name: Ensure deleted users are purged daily #1
   cron:
     name: "List maildirs of deleted mail users"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove --list --env=prod >/usr/local/share/userli/maildirs-remove.txt"
@@ -59,7 +59,7 @@
     user: "{{ userli_user }}"
     cron_file: userli
 
-- name: ensure deleted users are purged daily #2
+- name: Ensure deleted users are purged daily #2
   cron:
     name: "Remove maildirs of deleted mail users"
     job: "/usr/local/bin/userli-maildirs-remove.sh"
@@ -67,7 +67,7 @@
     user: "{{ userli_maildir_user }}"
     cron_file: userli
 
-- name: ensure weekly report job is latest
+- name: Ensure weekly report job is latest
   cron:
     name: "Weekly Report"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env=prod"
@@ -79,7 +79,7 @@
     state: "{{ userli_cron_weekly }}"
   when: userli_cron_weekly != "absent" # dirty fiy, but ansible otherwise removes all tasks
 
-- name: ensure old redeemed vouchers are unlinked
+- name: Ensure old redeemed vouchers are unlinked
   cron:
     name: "Unlink old redeemed vouchers"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:voucher:unlink --env prod"

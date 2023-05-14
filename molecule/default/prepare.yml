@@ -35,7 +35,7 @@
   tasks:
     - name: Install dependencies
       apt:
-        pkg: "{ packages }"
+        pkg: "{{ packages }}"
         update_cache: yes
 
     - name: Start required services
@@ -45,4 +45,3 @@
       loop:
         - apache2
         - mariadb
-
