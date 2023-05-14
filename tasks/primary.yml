@@ -1,6 +1,6 @@
 ---
 - name: ensure database is present
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
     state: present
     encoding: "utf8"
@@ -9,7 +9,7 @@
   register: database_creation
 
 - name: ensure mysql user is present
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ userli_mysql_user }}"
     password: "{{ userli_mysql_password }}"
     priv: "{{ userli_mysql_priv }}"
@@ -17,7 +17,7 @@
     login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: allow mysql users from secondary instance
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     priv: "{{ userli_mysql_db }}.*:INSERT,SELECT,UPDATE/{{ userli_mysql_db }}.virtual_aliases:DELETE/{{ userli_mysql_db }}.virtual_vouchers:DELETE"
