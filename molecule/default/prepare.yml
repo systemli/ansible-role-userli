@@ -2,21 +2,29 @@
 - name: Prepare
   hosts: all
   become: true
-  pre_tasks:
-    - name: Run the equivalent of "apt-get update" before installing packages
-      apt:
-        update_cache: yes
-
-    - name: Install cron for testing in docker containers
-      apt:
-        pkg: cron
-        update_cache: yes
-  roles:
-    - weareinteractive.apt
-    - geerlingguy.apache
-    - geerlingguy.php
-    - systemli.mariadb
   vars:
+    packages:
+      - acl  # support for unpriviledged become_user
+      - cron
+      - unzip
+      # necessary
+      - apache2
+      - mariadb-server
+      - libapache2-mod-php
+      - php7.4-apcu
+      - php7.4-cli
+      - php7.4-curl
+      - php7.4-fpm
+      - php7.4-gd
+      - php7.4-mbstring
+      - php7.4-mysql
+      - php7.4-xml
+      - php7.4-zip
+      # performance
+      - php7.4-ctype
+      - php7.4-intl
+      # debugging
+      - php7.4-xdebug
     apache_listen_port: 8080
     apache_remove_default_vhost: true
     apache_vhosts:
@@ -24,24 +32,17 @@
         documentroot: /var/www/userli/public
         extra_parameters: |
           SetEnv APP_ENV prod
-    apt_packages:
-      - acl  # support for unpriviledged become_user
-      - unzip
-    php_default_version_debian: "{% if ansible_distribution_release == 'buster' %}7.3{% else %}7.4{% endif %}"
-    php_packages:
-      # necessary
-      - libapache2-mod-php
-      - php{{ php_default_version_debian }}-apcu
-      - php{{ php_default_version_debian }}-cli
-      - php{{ php_default_version_debian }}-curl
-      - php{{ php_default_version_debian }}-fpm
-      - php{{ php_default_version_debian }}-gd
-      - php{{ php_default_version_debian }}-mbstring
-      - php{{ php_default_version_debian }}-mysql
-      - php{{ php_default_version_debian }}-xml
-      - php{{ php_default_version_debian }}-zip
-      # performance
-      - php{{ php_default_version_debian }}-ctype
-      - php{{ php_default_version_debian }}-intl
-      # debugging
-      - php{{ php_default_version_debian }}-xdebug
+  tasks:
+    - name: Install dependencies
+      apt:
+        pkg: "{ packages }"
+        update_cache: yes
+
+    - name: Start required services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+      loop:
+        - apache2
+        - mariadb
+
