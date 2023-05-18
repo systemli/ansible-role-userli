@@ -1,7 +1,7 @@
 ---
 
 roles:
-  - src: weareinteractive.apt
-  - src: geerlingguy.apache
-  - src: geerlingguy.php
-  - src: systemli.mariadb
+  - name: weareinteractive.apt
+  - name: geerlingguy.apache
+  - name: geerlingguy.php
+  - name: systemli.mariadb
