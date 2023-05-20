@@ -1,6 +1,0 @@
----
-- name: ensure libsodium is installed
-  apt:
-    pkg: php-sodium
-    state: present
-  when: ansible_distribution_release == 'stretch'

@@ -1,16 +1,15 @@
 ---
-- import_tasks: dependencies.yml
 
-- name: ensure group is present
+- name: Ensure group is present
   group:
     name: "{{ userli_group }}"
 
-- name: ensure user is present
+- name: Ensure user is present
   user:
     name: "{{ userli_user }}"
     group: "{{ userli_group }}"
 
-- name: download release
+- name: Download release
   get_url:
     url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz"
     dest: "{{ userli_home }}"
@@ -24,7 +23,7 @@
 # TODO: Check release tarball PGP signature
 # TODO: Chown app files as root:root for better security
 #       Only var/cache and var/log should be owned by userli user
-- name: unarchive release
+- name: Unarchive release
   unarchive:
     src: "{{ userli_home }}/userli-{{ userli_version }}.tar.gz"
     dest: "{{ userli_home }}/"
@@ -33,7 +32,7 @@
     remote_src: true
   when: userli_download.changed
 
-- name: update permissions for release directory
+- name: Update permissions for release directory
   file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}"
     state: directory
@@ -41,7 +40,7 @@
     group: "{{ userli_user }}"
     mode: 0755
 
-- name: update permissions for documentroot
+- name: Update permissions for documentroot
   file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}/public"
     state: directory
@@ -49,16 +48,16 @@
     group: "{{ userli_user }}"
     mode: 0750
 
-- name: ensure .env.local is installed
+- name: Ensure .env.local is installed
   template:
     src: ".env.local.j2"
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
     mode: 0640
-  notify: dump environment for better performance
+  notify: Dump environment for better performance
 
-- name: ensure extra directories are latest
+- name: Ensure extra directories are latest
   file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
     state: directory
@@ -68,7 +67,7 @@
   with_community.general.filetree: "{{ userli_directory }}"
   when: item.state == 'directory'
 
-- name: ensure extra files are latest
+- name: Ensure extra files are latest
   copy:
     src: "{{ item.src }}"
     dest: "{{ userli_home }}/userli-{{ userli_version }}/{{ item.path }}"
@@ -78,25 +77,28 @@
   with_community.general.filetree: "{{ userli_directory }}"
   when: item.state == 'file'
 
-- name: set link to current release
+- name: Set link to current release
   file:
     state: link
     path: "{{ userli_symfony_path }}"
     src: "userli-{{ userli_version }}"
-  notify: restart webserver
+  notify: Restart webserver
 
-- import_tasks: primary.yml
+- name: Import tasks for DB primary
+  import_tasks: primary.yml
   when: userli_primary|bool
 
-- name: ensure lograte config is latest
+- name: Ensure lograte config is latest
   template:
     src: logrotate.conf.j2
     dest: /etc/logrotate.d/userli
     mode: 0644
 
-- import_tasks: deployment.yml
+- name: Import deployment tasks
+  import_tasks: deployment.yml
   when: userli_update|bool
 
-- import_tasks: munin.yml
+- name: Import Munin tasks
+  import_tasks: munin.yml
   when: userli_munin|bool
   tags: munin
