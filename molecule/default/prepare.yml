@@ -27,7 +27,7 @@
     apt_packages:
       - acl  # support for unpriviledged become_user
       - unzip
-    php_default_version_debian: "{% if ansible_distribution_release == 'buster' %}7.3{% else %}7.4{% endif %}"
+    php_default_version_debian: "{% if ansible_distribution_release == 'bullseye' %}7.4{% else %}8.2{% endif %}"
     php_packages:
       # necessary
       - libapache2-mod-php
