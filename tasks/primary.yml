@@ -26,8 +26,8 @@
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
 
-- name: Create default database schema  # noqa no-changed-when
-  command: bin/console doctrine:schema:create
+- name: Create default database schema # noqa no-changed-when no-handler
+  ansible.builtin.command: bin/console doctrine:schema:create
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -36,23 +36,23 @@
   when: database_creation.changed
 
 - name: Create directory for user maildir removal list
-  file:
+  ansible.builtin.file:
     dest: "/usr/local/share/userli"
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_maildir_group }}"
-    mode: 0750
+    mode: "0750"
 
 - name: Copy script to remove maildirs of deleted users
-  template:
+  ansible.builtin.template:
     src: "userli-maildirs-remove.sh.j2"
     dest: "/usr/local/bin/userli-maildirs-remove.sh"
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: Ensure deleted users are purged daily #1
-  cron:
+  ansible.builtin.cron:
     name: "List maildirs of deleted mail users"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove --list --env=prod >/usr/local/share/userli/maildirs-remove.txt"
     special_time: "daily"
@@ -60,7 +60,7 @@
     cron_file: userli
 
 - name: Ensure deleted users are purged daily #2
-  cron:
+  ansible.builtin.cron:
     name: "Remove maildirs of deleted mail users"
     job: "/usr/local/bin/userli-maildirs-remove.sh"
     special_time: "daily"
@@ -68,7 +68,7 @@
     cron_file: userli
 
 - name: Ensure weekly report job is latest
-  cron:
+  ansible.builtin.cron:
     name: "Weekly Report"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env=prod"
     weekday: "1"
@@ -80,7 +80,7 @@
   when: userli_cron_weekly != "absent" # dirty fiy, but ansible otherwise removes all tasks
 
 - name: Ensure old redeemed vouchers are unlinked
-  cron:
+  ansible.builtin.cron:
     name: "Unlink old redeemed vouchers"
     job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:voucher:unlink --env prod"
     special_time: "daily"

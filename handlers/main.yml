@@ -1,12 +1,11 @@
 ---
-
 - name: Restart munin-node
-  service:
+  ansible.builtin.service:
     name: munin-node
     state: restarted
 
-- name: Dump environment for better performance  # noqa no-changed-when ignore-errors
-  command: composer dump-env prod
+- name: Dump environment for better performance # noqa no-changed-when ignore-errors
+  ansible.builtin.command: composer dump-env prod
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -16,13 +15,13 @@
   notify: Adjust permissions for dumped environment file
 
 - name: Adjust permissions for dumped environment file
-  file:
+  ansible.builtin.file:
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local.php"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
-    mode: 0640
+    mode: "0640"
 
 - name: Restart webserver
-  service:
+  ansible.builtin.service:
     name: "{{ userli_webserver }}"
     state: restarted

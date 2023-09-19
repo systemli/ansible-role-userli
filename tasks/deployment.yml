@@ -1,6 +1,6 @@
 ---
 - name: Clear and warmup cache
-  command: bin/console cache:clear && bin/console cache:warmup
+  ansible.builtin.command: bin/console cache:clear && bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -12,12 +12,12 @@
   failed_when: cache.rc != 0
 
 - name: Clear cache
-  file:
+  ansible.builtin.file:
     path: "var/cache/prod"
     state: absent
 
-- name: Warmup cache  # noqa no-changed-when
-  command: bin/console cache:warmup
+- name: Warmup cache # noqa no-changed-when
+  ansible.builtin.command: bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -28,28 +28,28 @@
     - cache.rc != 0
 
 - name: Adjust permissions for cache directory
-  file:
+  ansible.builtin.file:
     path: "{{ userli_symfony_path }}/var/cache/prod"
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
     mode: u+rw,g+r
-    recurse: True
+    recurse: true
 
 - name: Adjust permissions for log directory
-  file:
+  ansible.builtin.file:
     path: "{{ userli_symfony_path }}/var/log"
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: 04755
+    mode: "04755"
 
 - name: Create or adjust permissions for prod.log
-  file:
+  ansible.builtin.file:
     path: "{{ userli_symfony_path }}/var/log/{{ item }}"
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: 0664
+    mode: "0664"
     state: touch
     access_time: preserve
     modification_time: preserve
@@ -58,7 +58,7 @@
     - prod.deprecations.log
 
 - name: Load default reservedNames into database
-  command: bin/console app:reservednames:import
+  ansible.builtin.command: bin/console app:reservednames:import
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
@@ -69,8 +69,8 @@
   failed_when: __userli_reserved_names.rc != 0
 
 - name: Load custom reservedNames into database
-  command: 'echo "{{ userli_extra_reserved_names | join("\n") }}"
-    | bin/console app:reservednames:import --file=-'
+  ansible.builtin.command: |
+    'echo "{{ userli_extra_reserved_names | join("\n") }}" | bin/console app:reservednames:import --file=-'
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
