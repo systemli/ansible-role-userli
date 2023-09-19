@@ -1,6 +1,6 @@
 ---
 - name: Ensure munin plugins from userli are linked
-  file:
+  ansible.builtin.file:
     src: "{{ userli_symfony_path }}/bin/{{ item }}"
     dest: "/etc/munin/plugins/{{ item }}"
     state: link
@@ -11,9 +11,9 @@
     - user-vouchers
 
 - name: Ensure user plugin config is present
-  template:
+  ansible.builtin.template:
     src: user.munin.j2
     dest: /etc/munin/plugin-conf.d/user
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
