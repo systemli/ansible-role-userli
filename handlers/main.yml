@@ -10,6 +10,7 @@
     chdir: "{{ userli_symfony_path }}"
   environment:
     APP_ENV: "prod"
+  become: true
   become_user: "{{ userli_user }}"
   ignore_errors: true
   notify: Adjust permissions for dumped environment file
