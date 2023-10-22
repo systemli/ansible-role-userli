@@ -1,4 +1,7 @@
 ---
+- name: Preflight checks
+  ansible.builtin.include_tasks: preflight.yml
+
 - name: Ensure group is present
   ansible.builtin.group:
     name: "{{ userli_group }}"

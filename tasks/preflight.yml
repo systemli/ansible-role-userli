@@ -1,0 +1,7 @@
+---
+- name: Assert that required variables are set
+  ansible.builtin.assert:
+    that:
+      - userli_mysql_password is defined and userli_mysql_password != ""
+    fail_msg: "userli_mysql_password is not defined or empty"
+    success_msg: "userli_mysql_password is defined and not empty"
