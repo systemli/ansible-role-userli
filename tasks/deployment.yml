@@ -71,15 +71,25 @@
   changed_when: __userli_reserved_names.rc != 0
   failed_when: __userli_reserved_names.rc != 0
 
+- name: Dump custom reservedNames into file
+  ansible.builtin.template:
+    src: reserved_names.j2
+    dest: "{{ userli_home }}/reserved_names"
+    owner: "{{ userli_user }}"
+    group: "{{ userli_group }}"
+    mode: "0660"
+  when: userli_extra_reserved_names.length > 0
+
 - name: Load custom reservedNames into database
   ansible.builtin.command: |
-    'echo "{{ userli_extra_reserved_names | join("\n") }}" | bin/console app:reservednames:import --file=-'
+    "bin/console app:reservednames:import --file={{ userli_home }}/reserved_names"
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
     APP_ENV: "prod"
   become: true
   become_user: "{{ userli_user }}"
+  when: userli_extra_reserved_names.length > 0
   register: __userli_reserved_names
   changed_when: __userli_reserved_names.rc != 0
   failed_when: __userli_reserved_names.rc != 0
