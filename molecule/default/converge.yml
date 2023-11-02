@@ -4,6 +4,6 @@
   hosts: all
   become: true
   roles:
-    - ansible-role-userli
+    - systemli.userli
   vars:
     userli_mysql_password: userli
