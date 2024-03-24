@@ -11,7 +11,7 @@ Requirements
 ------------
 
   * composer
-  * PHP >= 8.0
+  * PHP >= 8.2
   * php-apcu
   * php-curl
   * php-gd
