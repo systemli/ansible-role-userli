@@ -26,3 +26,15 @@
   ansible.builtin.service:
     name: "{{ userli_webserver }}"
     state: restarted
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart userli-collector
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - userli-collector.service
+    - userli-collector.timer

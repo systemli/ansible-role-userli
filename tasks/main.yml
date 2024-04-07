@@ -103,4 +103,7 @@
 - name: Import Munin tasks
   ansible.builtin.import_tasks: munin.yml
   when: userli_munin | bool
-  tags: munin
+
+- name: Import metrics tasks
+  ansible.builtin.import_tasks: metrics.yml
+  when: userli_prometheus_textfile_collector_enabled | bool
