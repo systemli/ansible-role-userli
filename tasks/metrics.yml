@@ -1,5 +1,5 @@
 ---
-- name: Copy Textfile Collector Service
+- name: Copy Textfile Collector Service and Timer
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}"
@@ -13,11 +13,8 @@
     - userli-collector.service
     - userli-collector.timer
 
-- name: Enable Textfile Collector Service
+- name: Enable Textfile Collector Timer
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: userli-collector.timer
     enabled: yes
     state: started
-  loop:
-    - userli-collector.service
-    - userli-collector.timer
