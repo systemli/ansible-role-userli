@@ -35,9 +35,6 @@ userli_prometheus_textfile_collector_enabled: False
 userli_prometheus_textfile_collector_path: "/var/lib/prometheus/node-exporter"
 userli_prometheus_textfile_collector_on_calendar: "*-*-* *:*:00"
 
-# munin integration
-userli_munin: False
-
 userli_primary: True
 userli_webserver: apache2
 
