@@ -1,9 +1,4 @@
 ---
-- name: Restart munin-node
-  ansible.builtin.service:
-    name: munin-node
-    state: restarted
-
 - name: Dump environment for better performance # noqa no-changed-when ignore-errors
   ansible.builtin.command: composer dump-env prod
   args:
