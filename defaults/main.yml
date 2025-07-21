@@ -1,5 +1,5 @@
 ---
-userli_version: "4.0.0"
+userli_version: "4.1.0"
 userli_mysql_user: "userli"
 userli_mysql_password: ""
 userli_mysql_db: "userli"
