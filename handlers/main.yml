@@ -26,6 +26,14 @@
   ansible.builtin.systemd:
     daemon_reload: true
 
+- name: Restart userli services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - userli-worker.service
+    - userli-scheduler.service
+
 - name: Restart userli-collector
   ansible.builtin.service:
     name: "{{ item }}"

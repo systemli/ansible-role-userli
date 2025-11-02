@@ -96,6 +96,18 @@
     dest: /etc/logrotate.d/userli
     mode: "0644"
 
+- name: Configure systemd services
+  ansible.builtin.template:
+    src: "systemd/{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    mode: "0644"
+  loop:
+    - userli-scheduler.service
+    - userli-worker.service
+  notify:
+    - Reload systemd daemon
+    - Restart userli services
+
 - name: Import deployment tasks
   ansible.builtin.import_tasks: deployment.yml
   when: userli_update | bool
