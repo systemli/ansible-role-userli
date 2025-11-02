@@ -98,7 +98,7 @@
 
 - name: Configure systemd services
   ansible.builtin.template:
-    src: "systemd/{{ item }}.j2"
+    src: "{{ item }}.j2"
     dest: "/etc/systemd/system/{{ item }}"
     mode: "0644"
   loop:
