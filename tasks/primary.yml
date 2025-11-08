@@ -68,6 +68,8 @@
     user: "{{ userli_maildir_user }}"
     cron_file: userli
 
+# Will be replaced by userli-scheduler and userli-worker systemd services
+# TODO: Remove in future versions
 - name: Ensure weekly report job is latest
   ansible.builtin.cron:
     name: "Weekly Report"
@@ -77,9 +79,10 @@
     minute: "12"
     user: "{{ userli_user }}"
     cron_file: userli
-    state: "{{ userli_cron_weekly }}"
-  when: userli_cron_weekly != "absent" # dirty fiy, but ansible otherwise removes all tasks
+    state: "absent"
 
+# Will be replaced by userli-scheduler and userli-worker systemd services
+# TODO: Remove in future versions
 - name: Ensure old redeemed vouchers are unlinked
   ansible.builtin.cron:
     name: "Unlink old redeemed vouchers"
@@ -87,3 +90,4 @@
     special_time: "daily"
     user: "{{ userli_user }}"
     cron_file: userli
+    state: "absent"

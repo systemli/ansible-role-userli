@@ -1,0 +1,15 @@
+[Unit]
+Description=Userli Scheduler
+
+[Service]
+User={{ userli_user }}
+Group={{ userli_group }}
+WorkingDirectory={{ userli_symfony_path }}
+ExecStart=php bin/console messenger:consume scheduler_maintenance --time-limit=3600
+Restart=always
+RestartSec=30
+
+SyslogIdentifier=userli-worker
+
+[Install]
+WantedBy=default.target

@@ -1,4 +1,12 @@
 ---
+- name: Stop services before deployment
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+  loop:
+    - userli-worker.service
+    - userli-scheduler.service
+
 - name: Clear and warmup cache
   ansible.builtin.command: bin/console cache:clear && bin/console cache:warmup
   args:
@@ -104,3 +112,11 @@
   register: __userli_reserved_names
   changed_when: __userli_reserved_names.rc != 0
   failed_when: __userli_reserved_names.rc != 0
+
+- name: Start services after deployment
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+  loop:
+    - userli-worker.service
+    - userli-scheduler.service
