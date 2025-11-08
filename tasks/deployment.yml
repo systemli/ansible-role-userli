@@ -68,16 +68,34 @@
     - prod.deprecations.log
 
 - name: Perform a schema update
-  ansible.builtin.command: bin/console doctrine:schema:update --dump-sql --force --no-interaction
-  args:
-    chdir: "{{ userli_symfony_path }}"
-  environment:
-    APP_ENV: "prod"
-  become: true
-  become_user: "{{ userli_user }}"
-  register: __userli_schema_update
-  changed_when: "'[OK] Database schema updated successfully!' in __userli_schema_update.stdout"
-  failed_when: __userli_schema_update.rc != 0
+  block:
+    - name: Grant temporary elevated privileges to the database user
+      community.mysql.mysql_user:
+        name: "{{ userli_mysql_user }}"
+        password: "{{ userli_mysql_password }}"
+        priv: "{{ userli_mysql_db }}.*:ALL"
+        host: "localhost"
+        login_unix_socket: /run/mysqld/mysqld.sock
+
+    - name: Update database schema
+      ansible.builtin.command: bin/console doctrine:schema:update --dump-sql --force --no-interaction
+      args:
+        chdir: "{{ userli_symfony_path }}"
+      environment:
+        APP_ENV: "prod"
+      become: true
+      become_user: "{{ userli_user }}"
+      register: __userli_schema_update
+      changed_when: "'[OK] Database schema updated successfully!' in __userli_schema_update.stdout"
+      failed_when: __userli_schema_update.rc != 0
+  always:
+    - name: Revoke temporary elevated privileges from the database user
+      community.mysql.mysql_user:
+        name: "{{ userli_mysql_user }}"
+        password: "{{ userli_mysql_password }}"
+        priv: "{{ userli_mysql_priv }}"
+        host: "localhost"
+        login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: Load default reservedNames into database
   ansible.builtin.command: bin/console app:reservednames:import
