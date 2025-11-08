@@ -26,21 +26,18 @@
     apt_packages:
       - acl # support for unpriviledged become_user
       - unzip
-    php_default_version_debian: "{% if ansible_distribution_release == 'bullseye' %}7.4{% else %}8.2{% endif %}"
     php_packages:
       # necessary
       - libapache2-mod-php
-      - php{{ php_default_version_debian }}-apcu
-      - php{{ php_default_version_debian }}-cli
-      - php{{ php_default_version_debian }}-curl
-      - php{{ php_default_version_debian }}-fpm
-      - php{{ php_default_version_debian }}-gd
-      - php{{ php_default_version_debian }}-mbstring
-      - php{{ php_default_version_debian }}-mysql
-      - php{{ php_default_version_debian }}-xml
-      - php{{ php_default_version_debian }}-zip
+      - php8.2-cli
+      - php8.2-curl
+      - php8.2-fpm
+      - php8.2-gd
+      - php8.2-mbstring
+      - php8.2-mysql
+      - php8.2-opcache
+      - php8.2-xml
+      - php8.2-zip
       # performance
-      - php{{ php_default_version_debian }}-ctype
-      - php{{ php_default_version_debian }}-intl
-      # debugging
-      - php{{ php_default_version_debian }}-xdebug
+      - php8.2-ctype
+      - php8.2-intl
