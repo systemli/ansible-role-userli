@@ -1,18 +1,24 @@
 ---
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: docker
 
 platforms:
-  - name: userli-bookworm64
-    box: debian/bookworm64
-    memory: 512
-    cpus: 2
-    instance_raw_config_args:
-      - "vm.network 'forwarded_port', guest: 8080, host: 8080"
+  - name: debian12
+    image: "geerlingguy/docker-debian12-ansible:latest"
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /var/lib/containerd
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - --diff
 
 dependency:
   name: galaxy
   options:
-    force: false
+    requirements-file: requirements.yml
