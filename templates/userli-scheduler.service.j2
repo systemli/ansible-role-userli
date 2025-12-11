@@ -9,7 +9,7 @@ ExecStart=php bin/console messenger:consume scheduler_maintenance --time-limit=3
 Restart=always
 RestartSec=30
 
-SyslogIdentifier=userli-worker
+SyslogIdentifier=userli-scheduler
 
 [Install]
 WantedBy=default.target
