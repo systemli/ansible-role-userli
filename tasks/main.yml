@@ -115,3 +115,12 @@
 - name: Import metrics tasks
   ansible.builtin.import_tasks: metrics.yml
   when: userli_prometheus_textfile_collector_enabled | bool
+
+- name: Enable and start userli services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - userli-scheduler.service
+    - userli-worker.service
