@@ -46,9 +46,4 @@ userli_parameters_locale: "en"
 # https://github.com/ansible/ansible/pull/63097/files
 ansible_python_interpreter: /usr/bin/python3
 
-# System group with write access to maildirs
-userli_maildir_user: "mail"
-userli_maildir_group: "mail"
-userli_maildir_location: "/var/vmail"
-
 userli_directory: userli/
