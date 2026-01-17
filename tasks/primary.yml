@@ -36,58 +36,24 @@
   become_user: "{{ userli_user }}"
   when: database_creation.changed
 
-- name: Create directory for user maildir removal list
+- name: Delete directory for user maildir removal list
   ansible.builtin.file:
-    dest: "/usr/local/share/userli"
-    state: directory
-    owner: "{{ userli_user }}"
-    group: "{{ userli_maildir_group }}"
-    mode: "0750"
+    path: "/usr/local/share/userli"
+    state: "absent"
 
-- name: Copy script to remove maildirs of deleted users
-  ansible.builtin.template:
-    src: "userli-maildirs-remove.sh.j2"
-    dest: "/usr/local/bin/userli-maildirs-remove.sh"
-    owner: root
-    group: root
-    mode: "0755"
+- name: Delete script to remove maildirs of deleted users
+  ansible.builtin.file:
+    path: "/usr/local/bin/userli-maildirs-remove.sh"
+    state: "absent"
 
 - name: Ensure deleted users are purged daily #1
   ansible.builtin.cron:
     name: "List maildirs of deleted mail users"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:users:remove --list --env=prod >/usr/local/share/userli/maildirs-remove.txt"
-    special_time: "daily"
-    user: "{{ userli_user }}"
     cron_file: userli
+    state: "absent"
 
 - name: Ensure deleted users are purged daily #2
   ansible.builtin.cron:
     name: "Remove maildirs of deleted mail users"
-    job: "/usr/local/bin/userli-maildirs-remove.sh"
-    special_time: "daily"
-    user: "{{ userli_maildir_user }}"
-    cron_file: userli
-
-# Will be replaced by userli-scheduler and userli-worker systemd services
-# TODO: Remove in future versions
-- name: Ensure weekly report job is latest
-  ansible.builtin.cron:
-    name: "Weekly Report"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:report:weekly --env=prod"
-    weekday: "1"
-    hour: "13"
-    minute: "12"
-    user: "{{ userli_user }}"
-    cron_file: userli
-    state: "absent"
-
-# Will be replaced by userli-scheduler and userli-worker systemd services
-# TODO: Remove in future versions
-- name: Ensure old redeemed vouchers are unlinked
-  ansible.builtin.cron:
-    name: "Unlink old redeemed vouchers"
-    job: "cd {{ userli_symfony_path }} && APP_ENV=prod php bin/console app:voucher:unlink --env prod"
-    special_time: "daily"
-    user: "{{ userli_user }}"
     cron_file: userli
     state: "absent"
