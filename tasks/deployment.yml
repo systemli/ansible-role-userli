@@ -78,7 +78,7 @@
         login_unix_socket: /run/mysqld/mysqld.sock
 
     - name: Update database schema
-      ansible.builtin.command: bin/console doctrine:schema:update --dump-sql --force --no-interaction
+      ansible.builtin.command: bin/console doctrine:migrations:migrate --no-interaction
       args:
         chdir: "{{ userli_symfony_path }}"
       environment:
@@ -86,7 +86,7 @@
       become: true
       become_user: "{{ userli_user }}"
       register: __userli_schema_update
-      changed_when: "'[OK] Database schema updated successfully!' in __userli_schema_update.stdout"
+      changed_when: "'[OK] Successfully migrated to version:' in __userli_schema_update.stdout"
       failed_when: __userli_schema_update.rc != 0
   always:
     - name: Revoke temporary elevated privileges from the database user
