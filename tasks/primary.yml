@@ -1,4 +1,9 @@
 ---
+- name: Ensure python3-pymysql is installed
+  ansible.builtin.package:
+    name: python3-pymysql
+    state: present
+
 - name: Ensure database is present
   community.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
