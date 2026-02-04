@@ -11,6 +11,14 @@
     name: "{{ userli_user }}"
     group: "{{ userli_group }}"
 
+- name: Ensure directory exists
+  ansible.builtin.file:
+    group: "{{ userli_user }}"
+    mode: "0755"
+    owner: "{{ userli_user }}"
+    path: "{{ userli_home }}"
+    state: directory
+
 - name: Download release
   ansible.builtin.get_url:
     url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz"
