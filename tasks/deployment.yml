@@ -8,7 +8,7 @@
     - userli-scheduler.service
 
 - name: Clear and warmup cache
-  ansible.builtin.command: bin/console cache:clear && bin/console cache:warmup
+  ansible.builtin.shell: bin/console cache:clear && bin/console cache:warmup
   args:
     chdir: "{{ userli_symfony_path }}"
   environment:
