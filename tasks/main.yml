@@ -13,9 +13,9 @@
 
 - name: Ensure directory exists
   ansible.builtin.file:
-    group: "{{ userli_user }}"
+    group: root
     mode: "0755"
-    owner: "{{ userli_user }}"
+    owner: root
     path: "{{ userli_home }}"
     state: directory
 
