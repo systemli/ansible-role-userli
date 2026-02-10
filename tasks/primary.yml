@@ -31,7 +31,7 @@
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
 
-- name: Create default database schema
+- name: Create default database schema # noqa no-handler
   when: database_creation.changed
   block:
     - name: Grant temporary elevated privileges to the database user
