@@ -9,16 +9,18 @@ and encrypt their mailboxes. Find more information at
 ## Requirements
 
 * composer
-* PHP >= 8.2
-* php-apcu
+* PHP >= 8.4
+* php-apcu (optional)
 * php-curl
 * php-gd
 * php-mbstring
 * php-mysql / php-pgsql
+* php-opcache
 * php-xml
 * php-zip
 * php-ctype
 * php-intl
+* php-redis (optional, for Redis cache)
 * MariaDB/MySQL/PostgreSQL/SQLite
 
 ## Role Variables
@@ -35,7 +37,7 @@ See `molecule/default/prepare.yml` for an example setup.
 
 ## Example Playbook
 
-See `molecule/default/playbook.yml` for an example playbook.
+See `molecule/default/converge.yml` for an example playbook.
 
 ## Tests
 
