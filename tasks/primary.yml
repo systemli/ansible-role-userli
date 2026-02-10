@@ -8,8 +8,8 @@
   community.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
     state: present
-    encoding: "utf8"
-    collation: "utf8_general_ci"
+    encoding: "utf8mb4"
+    collation: "utf8mb4_unicode_ci"
     login_unix_socket: /run/mysqld/mysqld.sock
   register: database_creation
 
