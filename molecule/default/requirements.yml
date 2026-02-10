@@ -1,6 +1,4 @@
 ---
-roles:
-  - name: weareinteractive.apt
-  - name: geerlingguy.apache
-  - name: geerlingguy.php
-  - name: systemli.mariadb
+collections:
+  - community.general
+  - community.mysql
