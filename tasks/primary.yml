@@ -8,8 +8,8 @@
   community.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
     state: present
-    encoding: "utf8"
-    collation: "utf8_general_ci"
+    encoding: "utf8mb4"
+    collation: "utf8mb4_unicode_ci"
     login_unix_socket: /run/mysqld/mysqld.sock
   register: database_creation
 
@@ -25,18 +25,39 @@
   community.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    priv: "{{ userli_mysql_db }}.*:INSERT,SELECT,UPDATE/{{ userli_mysql_db }}.virtual_aliases:DELETE/{{ userli_mysql_db }}.virtual_vouchers:DELETE"
+    priv: "{{ userli_mysql_priv }}"
     host: "{{ item.host }}"
     login_unix_socket: /run/mysqld/mysqld.sock
   with_items: "{{ userli_secondary_users }}"
   when: userli_secondary_users is defined
 
-- name: Create default database schema # noqa no-changed-when no-handler
-  ansible.builtin.command: bin/console doctrine:schema:create
-  args:
-    chdir: "{{ userli_symfony_path }}"
-  environment:
-    APP_ENV: "prod"
-  become: true
-  become_user: "{{ userli_user }}"
+- name: Create default database schema # noqa no-handler
   when: database_creation.changed
+  block:
+    - name: Grant temporary elevated privileges to the database user
+      community.mysql.mysql_user:
+        name: "{{ userli_mysql_user }}"
+        password: "{{ userli_mysql_password }}"
+        priv: "{{ userli_mysql_db }}.*:ALL"
+        host: "localhost"
+        login_unix_socket: /run/mysqld/mysqld.sock
+
+    - name: Run database migrations
+      ansible.builtin.command: bin/console doctrine:migrations:migrate --no-interaction
+      args:
+        chdir: "{{ userli_symfony_path }}"
+      environment:
+        APP_ENV: "prod"
+      become: true
+      become_user: "{{ userli_user }}"
+      register: __userli_schema_create
+      changed_when: "'Successfully' in __userli_schema_create.stdout"
+      failed_when: __userli_schema_create.rc != 0
+  always:
+    - name: Revoke temporary elevated privileges from the database user
+      community.mysql.mysql_user:
+        name: "{{ userli_mysql_user }}"
+        password: "{{ userli_mysql_password }}"
+        priv: "{{ userli_mysql_priv }}"
+        host: "localhost"
+        login_unix_socket: /run/mysqld/mysqld.sock

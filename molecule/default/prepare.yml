@@ -41,3 +41,4 @@
       # performance
       - php8.4-ctype
       - php8.4-intl
+      - php8.4-redis
