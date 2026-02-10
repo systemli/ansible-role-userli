@@ -2,43 +2,74 @@
 - name: Prepare
   hosts: all
   become: true
-  pre_tasks:
-    - name: Run the equivalent of "apt-get update" before installing packages
+  tasks:
+    - name: Update apt cache
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
 
-    - name: Install cron for testing in docker containers
+    - name: Install required packages
       ansible.builtin.apt:
-        pkg: cron
-  roles:
-    - weareinteractive.apt
-    - geerlingguy.apache
-    - geerlingguy.php
-    - systemli.mariadb
-  vars:
-    apache_listen_port: 8080
-    apache_remove_default_vhost: true
-    apache_vhosts:
-      - servername: localhost
-        documentroot: /var/www/userli/public
-        extra_parameters: |
-          SetEnv APP_ENV prod
-    apt_packages:
-      - acl # support for unpriviledged become_user
-      - unzip
-    php_packages:
-      # necessary
-      - libapache2-mod-php
-      - php8.4-cli
-      - php8.4-curl
-      - php8.4-fpm
-      - php8.4-gd
-      - php8.4-mbstring
-      - php8.4-mysql
-      - php8.4-opcache
-      - php8.4-xml
-      - php8.4-zip
-      # performance
-      - php8.4-ctype
-      - php8.4-intl
-      - php8.4-redis
+        pkg:
+          # base
+          - acl
+          - unzip
+          # mariadb
+          - mariadb-server
+          - python3-mysqldb
+          # apache
+          - apache2
+          # php
+          - composer
+          - libapache2-mod-php
+          - php8.4-cli
+          - php8.4-curl
+          - php8.4-fpm
+          - php8.4-gd
+          - php8.4-mbstring
+          - php8.4-mysql
+          - php8.4-opcache
+          - php8.4-xml
+          - php8.4-zip
+          - php8.4-ctype
+          - php8.4-intl
+          - php8.4-redis
+
+    - name: Start and enable MariaDB
+      ansible.builtin.systemd:
+        name: mariadb
+        state: started
+        enabled: true
+
+    - name: Set Apache listen port to 8080
+      ansible.builtin.copy:
+        dest: /etc/apache2/ports.conf
+        content: |
+          Listen 8080
+        mode: "0644"
+
+    - name: Configure Apache vhost for userli
+      ansible.builtin.copy:
+        dest: /etc/apache2/sites-available/userli.conf
+        content: |
+          <VirtualHost *:8080>
+              ServerName localhost
+              DocumentRoot /var/www/userli/public
+              SetEnv APP_ENV prod
+          </VirtualHost>
+        mode: "0644"
+
+    - name: Disable default Apache site
+      ansible.builtin.command:
+        cmd: a2dissite 000-default
+      changed_when: false
+      failed_when: false
+
+    - name: Enable userli Apache site
+      ansible.builtin.command:
+        cmd: a2ensite userli
+      changed_when: false
+
+    - name: Restart Apache
+      ansible.builtin.systemd:
+        name: apache2
+        state: restarted
