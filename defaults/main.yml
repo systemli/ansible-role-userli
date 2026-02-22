@@ -1,5 +1,5 @@
 ---
-userli_version: "6.1.0"
+userli_version: "6.2.0"
 userli_mysql_user: "userli"
 userli_mysql_password: ""
 userli_mysql_db: "userli"
@@ -15,9 +15,6 @@ userli_wkd_format: "advanced" # or 'advanced' or 'direct'
 
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
 userli_update: False
-
-# extra reserved local parts
-userli_extra_reserved_names: []
 
 userli_env_vars:
   - name: DATABASE_URL
