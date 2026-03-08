@@ -59,8 +59,11 @@
     mode: "0750"
 
 - name: Ensure .env.local is installed
-  ansible.builtin.template:
-    src: ".env.local.j2"
+  ansible.builtin.copy:
+    content: |
+      {% for var in userli_env_vars %}
+      {{ var.name }}='{{ var.value }}'
+      {% endfor %}
     dest: "{{ userli_home }}/userli-{{ userli_version }}/.env.local"
     owner: "{{ userli_user }}"
     group: "{{ userli_user }}"
