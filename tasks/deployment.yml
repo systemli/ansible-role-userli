@@ -1,4 +1,18 @@
 ---
+- name: Stop webserver before deployment
+  ansible.builtin.service:
+    name: "{{ userli_webserver }}"
+    state: stopped
+
+- name: Drain Symfony Messenger workers # noqa no-changed-when
+  ansible.builtin.command: bin/console messenger:stop-workers
+  args:
+    chdir: "{{ userli_symfony_path }}"
+  environment:
+    APP_ENV: "prod"
+  become: true
+  become_user: "{{ userli_user }}"
+
 - name: Stop services before deployment
   ansible.builtin.service:
     name: "{{ item }}"
@@ -104,3 +118,8 @@
   loop:
     - userli-worker.service
     - userli-scheduler.service
+
+- name: Start webserver after deployment
+  ansible.builtin.service:
+    name: "{{ userli_webserver }}"
+    state: started
