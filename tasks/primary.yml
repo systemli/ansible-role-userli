@@ -5,7 +5,7 @@
     state: present
 
 - name: Ensure database is present
-  community.mysql.mysql_db:
+  ansible.mysql.mysql_db:
     name: "{{ userli_mysql_db }}"
     state: present
     encoding: "utf8mb4"
@@ -14,7 +14,7 @@
   register: database_creation
 
 - name: Ensure mysql user is present
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ userli_mysql_user }}"
     password: "{{ userli_mysql_password }}"
     priv: "{{ userli_mysql_priv }}"
@@ -22,7 +22,7 @@
     login_unix_socket: /run/mysqld/mysqld.sock
 
 - name: Allow mysql users from secondary instance
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     priv: "{{ userli_mysql_priv }}"
@@ -35,7 +35,7 @@
   when: database_creation.changed
   block:
     - name: Grant temporary elevated privileges to the database user
-      community.mysql.mysql_user:
+      ansible.mysql.mysql_user:
         name: "{{ userli_mysql_user }}"
         password: "{{ userli_mysql_password }}"
         priv: "{{ userli_mysql_db }}.*:ALL"
@@ -55,7 +55,7 @@
       failed_when: __userli_schema_create.rc != 0
   always:
     - name: Revoke temporary elevated privileges from the database user
-      community.mysql.mysql_user:
+      ansible.mysql.mysql_user:
         name: "{{ userli_mysql_user }}"
         password: "{{ userli_mysql_password }}"
         priv: "{{ userli_mysql_priv }}"
