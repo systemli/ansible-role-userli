@@ -84,7 +84,7 @@
 - name: Perform a schema update
   block:
     - name: Grant temporary elevated privileges to the database user
-      community.mysql.mysql_user:
+      ansible.mysql.mysql_user:
         name: "{{ userli_mysql_user }}"
         password: "{{ userli_mysql_password }}"
         priv: "{{ userli_mysql_db }}.*:ALL"
@@ -104,7 +104,7 @@
       failed_when: __userli_schema_update.rc != 0
   always:
     - name: Revoke temporary elevated privileges from the database user
-      community.mysql.mysql_user:
+      ansible.mysql.mysql_user:
         name: "{{ userli_mysql_user }}"
         password: "{{ userli_mysql_password }}"
         priv: "{{ userli_mysql_priv }}"
