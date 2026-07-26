@@ -39,6 +39,10 @@
         name: mariadb
         state: started
         enabled: true
+      register: mariadb_start
+      until: mariadb_start is succeeded
+      retries: 5
+      delay: 5
 
     - name: Set Apache listen port to 8080
       ansible.builtin.copy:
