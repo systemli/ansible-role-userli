@@ -35,9 +35,10 @@
           - php8.4-redis
 
     - name: Start and enable MariaDB
-      ansible.builtin.command:
-        cmd: systemctl enable --now mariadb
-      changed_when: false
+      ansible.builtin.service:
+        name: mariadb
+        enabled: true
+        state: restarted
 
     - name: Set Apache listen port to 8080
       ansible.builtin.copy:
