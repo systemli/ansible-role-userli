@@ -13,10 +13,7 @@ on:
 jobs:
   integration:
     name: Integration
-    # Pinned to main HEAD (not v1.6.1) to pick up the fix for the docker
-    # molecule-config schema validation failure caused by a dead
-    # `command: ""` line (systemli/github-ansible-workflow#44).
-    uses: systemli/github-ansible-workflow/.github/workflows/ansible-integration-workflow.yaml@c84fd859e3d5a323d554905cc47011f9daa91776
+    uses: systemli/github-ansible-workflow/.github/workflows/ansible-integration-workflow.yaml@v1.6.1
     with:
       disable-apparmor-mysql: true
       distros: '[ "debian13" ]'
