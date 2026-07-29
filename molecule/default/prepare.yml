@@ -34,6 +34,28 @@
           - php8.4-intl
           - php8.4-redis
 
+    - name: DEBUG - check init system state
+      ansible.builtin.shell: |
+        echo "--- ps aux ---"
+        ps aux
+        echo "--- /proc/1/comm ---"
+        cat /proc/1/comm
+        echo "--- /run/systemd/system ---"
+        stat /run/systemd/system || true
+        echo "--- systemctl is-system-running ---"
+        systemctl is-system-running || true
+        echo "--- systemctl show mariadb ---"
+        systemctl show mariadb || true
+        echo "--- systemd-detect-virt ---"
+        systemd-detect-virt || true
+      register: debug_init_state
+      changed_when: false
+      failed_when: false
+
+    - name: DEBUG - print init system state
+      ansible.builtin.debug:
+        var: debug_init_state.stdout_lines
+
     - name: Start and enable MariaDB
       ansible.builtin.command:
         cmd: systemctl enable --now mariadb
