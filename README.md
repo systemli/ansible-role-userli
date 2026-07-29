@@ -1,6 +1,6 @@
 # ansible-role-userli
 
-[![Build Status](https://github.com/systemli/ansible-role-userli/workflows/Integration/badge.svg?branch=main)](https://github.com/systemli/ansible-role-userli/actions?query=workflow%3AIntegration)
+[![Integration](https://github.com/systemli/ansible-role-userli/actions/workflows/main.yml/badge.svg)](https://github.com/systemli/ansible-role-userli/actions/workflows/main.yml)
 
 This role installs Userli, a web application to (self-) manage email users
 and encrypt their mailboxes. Find more information at
