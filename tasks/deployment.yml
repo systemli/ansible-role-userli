@@ -66,7 +66,7 @@
     state: directory
     owner: "{{ userli_user }}"
     group: "{{ userli_group }}"
-    mode: "04755"
+    mode: "0755"
 
 - name: Create or adjust permissions for prod.log
   ansible.builtin.file:
