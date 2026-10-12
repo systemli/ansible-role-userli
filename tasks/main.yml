@@ -32,7 +32,7 @@
 
 # TODO: Check release tarball PGP signature
 # TODO: Chown app files as root:root for better security
-#       Only var/cache and var/log should be owned by userli user
+#       Only var/cache should be owned by userli user
 - name: Unarchive release # noqa no-changed-when no-handler
   ansible.builtin.unarchive:
     src: "{{ userli_home }}/userli-{{ userli_version }}.tar.gz"
@@ -101,11 +101,10 @@
   ansible.builtin.import_tasks: primary.yml
   when: userli_primary | bool
 
-- name: Ensure lograte config is latest
-  ansible.builtin.template:
-    src: logrotate.conf.j2
-    dest: /etc/logrotate.d/userli
-    mode: "0644"
+- name: Remove obsolete logrotate config
+  ansible.builtin.file:
+    path: /etc/logrotate.d/userli
+    state: absent
 
 - name: Configure systemd services
   ansible.builtin.template:
