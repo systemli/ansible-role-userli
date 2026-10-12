@@ -60,27 +60,6 @@
     mode: u+rw,g+r
     recurse: true
 
-- name: Adjust permissions for log directory
-  ansible.builtin.file:
-    path: "{{ userli_symfony_path }}/var/log"
-    state: directory
-    owner: "{{ userli_user }}"
-    group: "{{ userli_group }}"
-    mode: "04755"
-
-- name: Create or adjust permissions for prod.log
-  ansible.builtin.file:
-    path: "{{ userli_symfony_path }}/var/log/{{ item }}"
-    owner: "{{ userli_user }}"
-    group: "{{ userli_group }}"
-    mode: "0664"
-    state: touch
-    access_time: preserve
-    modification_time: preserve
-  with_items:
-    - prod.log
-    - prod.deprecations.log
-
 - name: Perform a schema update
   block:
     - name: Grant temporary elevated privileges to the database user
