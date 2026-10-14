@@ -14,14 +14,32 @@ and encrypt their mailboxes. Find more information at
 * php-curl
 * php-gd
 * php-mbstring
-* php-mysql / php-pgsql
+* php-mysql
 * php-opcache
 * php-xml
 * php-zip
 * php-ctype
 * php-intl
 * php-redis (optional, for Redis cache)
-* MariaDB/MySQL/PostgreSQL/SQLite
+* MariaDB/MySQL on the same host
+
+The role only supports MariaDB/MySQL. It manages the database and the database
+user through the local socket `/run/mysqld/mysqld.sock`.
+
+## Deployment
+
+The role pins a Userli version in `userli_version`. To install Userli for the
+first time or to deploy a new version, run the role with `userli_update`:
+
+```shell
+ansible-playbook userli.yml -e userli_update=true
+```
+
+This stops the webserver and the background services, clears and warms up the
+cache, runs the database migrations and starts everything again.
+
+If the installed version differs from `userli_version` and `userli_update` is
+not set, the role fails before changing anything.
 
 ## Role Variables
 
@@ -29,6 +47,10 @@ Add files to `translations` or `userli/translations` to override the default str
 and their translations.
 
 See `defaults/main.yml` for available role variables.
+
+With `userli_prometheus_textfile_collector_enabled`, the role installs a
+systemd timer that writes metrics for the node exporter textfile collector. It
+installs `moreutils` for `sponge`.
 
 ## Dependencies
 
@@ -41,7 +63,7 @@ See `molecule/default/converge.yml` for an example playbook.
 
 ## Tests
 
-For developing and testing the role we use Github Actions, Molecule, and Vagrant.
+For developing and testing the role we use Github Actions, Molecule, and Docker.
 
 Run local tests with:
 

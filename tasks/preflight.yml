@@ -5,3 +5,20 @@
       - userli_mysql_password is defined and userli_mysql_password != ""
     fail_msg: "userli_mysql_password is not defined or empty"
     success_msg: "userli_mysql_password is defined and not empty"
+
+- name: Get currently deployed release
+  ansible.builtin.stat:
+    path: "{{ userli_symfony_path }}"
+    follow: false
+  register: __userli_current_release
+
+- name: Assert that a version change is deployed with userli_update
+  ansible.builtin.assert:
+    that:
+      - userli_update | bool or (__userli_current_release.stat.lnk_target | basename) == "userli-" ~ userli_version
+    fail_msg: >-
+      {{ userli_symfony_path }} points to {{ __userli_current_release.stat.lnk_target | basename }},
+      but userli_version is {{ userli_version }}. Run the role with
+      "-e userli_update=true" to deploy the new version.
+    success_msg: "No version change or userli_update is set"
+  when: __userli_current_release.stat.islnk | default(false)

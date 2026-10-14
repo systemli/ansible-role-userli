@@ -12,6 +12,7 @@ userli_group: "{{ userli_user }}"
 userli_symfony_path: "{{ userli_home }}/userli"
 
 # to trigger a deployment or initial rollout use "-e userli_update=True" in command line
+# the role fails if the installed version differs from userli_version and this is not set
 userli_update: False
 
 userli_env_vars:
