@@ -1,4 +1,9 @@
 ---
+- name: Ensure moreutils is installed for sponge
+  ansible.builtin.package:
+    name: moreutils
+    state: present
+
 - name: Copy Textfile Collector Service and Timer
   ansible.builtin.template:
     src: "{{ item }}.j2"
