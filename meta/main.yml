@@ -8,7 +8,7 @@ galaxy_info:
     https://systemli.github.io/userli/.
   company: systemli.org
   license: GPLv3
-  min_ansible_version: "2.15"
+  min_ansible_version: "2.16"
   platforms:
     - name: Debian
       versions:
