@@ -12,8 +12,7 @@ Ansible role that installs and configures Userli (email user self-management web
 
 ## Checks
 
-- `ansible-lint .` must pass (config in `.ansible-lint`, excludes `molecule/` and `.github/`)
-- `yamllint .` uses `.yamllint`
+- `ansible-lint .` must pass
 - `molecule test` runs the role in a container; CI does this via the shared `systemli/github-ansible-workflow`
 - `ansible-lint` creates `.ansible/`; it is git ignored, never commit it
 

@@ -10,7 +10,7 @@
     dest: "/etc/systemd/system/{{ item }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify:
     - Reload systemd daemon
     - Restart userli-collector
@@ -21,5 +21,5 @@
 - name: Enable Textfile Collector Timer
   ansible.builtin.systemd:
     name: userli-collector.timer
-    enabled: yes
+    enabled: true
     state: started
