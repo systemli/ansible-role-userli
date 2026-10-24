@@ -4,7 +4,9 @@ argument_specs:
     short_description: Install and deploy Userli
     description:
       - Downloads a Userli release, configures it and its systemd services and, on the database primary, sets up the MySQL database.
-      - The role fails if the deployed version differs from C(userli_version) and C(userli_update) is not true. Only versions with a known checksum in the role are supported.
+      - >-
+        The role fails if the deployed version differs from C(userli_version) and C(userli_update) is not true.
+        Only versions with a known checksum in the role are supported.
     options:
       userli_version:
         type: str
@@ -35,7 +37,9 @@ argument_specs:
       userli_update:
         type: bool
         description:
-          - Trigger a deployment or initial rollout, e.g. with C(-e userli_update=True). The role fails if the installed version differs from C(userli_version) and this is not set.
+          - >-
+            Trigger a deployment or initial rollout, e.g. with C(-e userli_update=True).
+            The role fails if the installed version differs from C(userli_version) and this is not set.
       userli_env_vars:
         type: list
         elements: dict
