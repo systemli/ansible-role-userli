@@ -10,58 +10,37 @@ argument_specs:
         type: str
         description:
           - Userli release to deploy. Must be a version for which the role knows the SHA512 checksum.
-        default: 6.10.6
       userli_mysql_user:
         type: str
-        default: userli
       userli_mysql_password:
         type: str
         description:
           - Password of the database user. The role fails if it is empty.
-        default: ''
       userli_mysql_db:
         type: str
-        default: userli
       userli_mysql_priv:
         type: str
-        default: '{{ userli_mysql_db }}.*:ALL'
       userli_db_type:
         type: str
-        default: mysql
       userli_db_url:
         type: str
-        default: '{{ userli_db_type }}://{{ userli_mysql_user }}:{{ userli_mysql_password }}@127.0.0.1:3306/{{ userli_mysql_db }}'
       userli_home:
         type: path
-        default: /var/www
       userli_user:
         type: str
-        default: www-data
       userli_group:
         type: str
-        default: '{{ userli_user }}'
       userli_symfony_path:
         type: path
-        default: '{{ userli_home }}/userli'
       userli_update:
         type: bool
         description:
           - Trigger a deployment or initial rollout, e.g. with C(-e userli_update=True). The role fails if the installed version differs from C(userli_version) and this is not set.
-        default: false
       userli_env_vars:
         type: list
         elements: dict
         description:
           - Environment variables written to C(.env.local), each with C(name) and C(value).
-        default:
-          - name: DATABASE_URL
-            value: '{{ userli_db_url }}'
-          - name: APP_DEBUG
-            value: 'false'
-          - name: APP_ENV
-            value: prod
-          - name: APP_SECRET
-            value: OVERRIDE_ME!
         options:
           name:
             type: str
@@ -71,35 +50,28 @@ argument_specs:
             required: true
       userli_prometheus_textfile_collector_enabled:
         type: bool
-        default: false
       userli_prometheus_textfile_collector_path:
         type: path
-        default: /var/lib/prometheus/node-exporter
       userli_prometheus_textfile_collector_on_calendar:
         type: str
         description:
           - systemd C(OnCalendar) expression.
-        default: '*-*-* *:*:00'
       userli_primary:
         type: bool
         description:
           - Run the tasks for the database primary (database and user setup).
-        default: true
       userli_webserver:
         type: str
         description:
           - Name of the webserver service which is restarted.
-        default: apache2
       userli_parameters_locale:
         type: str
         description:
           - Default language for the navbar.
-        default: en
       userli_directory:
         type: path
         description:
           - Local directory with extra files to be copied into the release (relative to the playbook).
-        default: userli/
       userli_secondary_users:
         type: list
         elements: dict
