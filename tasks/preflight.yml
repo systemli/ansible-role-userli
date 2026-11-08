@@ -1,4 +1,13 @@
 ---
+- name: Assert that userli version is supported
+  ansible.builtin.assert:
+    that:
+      - userli_version is version('6.10.6', '>=')
+    fail_msg: |
+      Version defined in 'userli_version' is not supported: {{ userli_version }}
+      Minimum required version: 6.10.6
+    quiet: true
+
 - name: Assert that required variables are set
   ansible.builtin.assert:
     that:
