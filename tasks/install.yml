@@ -18,6 +18,7 @@
     state: directory
 
 - name: Download current release
+  when: __userli_current_release.stat.exists is false or (__userli_current_release.stat.lnk_target | basename) != "userli-" + userli_version
   block:
     - name: Create tmpdir
       ansible.builtin.tempfile:
@@ -63,7 +64,7 @@
     - name: Unarchive release tarball to installation dir
       ansible.builtin.unarchive:
         src: "{{ _tmpdir.path }}/userli-{{ userli_version }}.tar.gz"
-        dest: "{{ userli_home }}/"
+        dest: "{{ userli_home }}"
         owner: "{{ userli_user }}"
         group: "{{ userli_user }}"
         remote_src: true
