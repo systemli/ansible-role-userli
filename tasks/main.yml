@@ -11,7 +11,7 @@
     name: "{{ userli_user }}"
     group: "{{ userli_group }}"
 
-- name: Ensure directory exists
+- name: Ensure installation directory exists
   ansible.builtin.file:
     group: root
     mode: "0755"
@@ -19,28 +19,70 @@
     path: "{{ userli_home }}"
     state: directory
 
-- name: Download release
-  ansible.builtin.get_url:
-    url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/userli-{{ userli_version }}.tar.gz"
-    dest: "{{ userli_home }}"
-    owner: "{{ userli_user }}"
-    group: "{{ userli_user }}"
-    checksum: "sha512:{{ userli_sha512_checksum[userli_version] }}"
-    mode: "0644"
-  register: userli_download
-  when: not ansible_check_mode
+- name: Download current release
+  block:
+    - name: Create tmpdir
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: "userli-{{ userli_version }}"
+      register: _tmpdir
 
-# TODO: Check release tarball PGP signature
+    - name: Ensure gnugpg is installed
+      ansible.builtin.apt:
+        name: gpg
+
+    - name: Download release files
+      ansible.builtin.get_url:
+        url: "https://github.com/systemli/userli/releases/download/{{ userli_version }}/{{ item }}"
+        dest: "{{ _tmpdir.path }}"
+        mode: "0644"
+        timeout: 20
+      loop:
+        - "userli-{{ userli_version }}.tar.gz"
+        - "userli-{{ userli_version }}.tar.gz.sha512"
+        - "userli-{{ userli_version }}.tar.gz.sha512.asc"
+      when: not ansible_check_mode
+
+    - name: Verify hashsum and gpg signature
+      ansible.builtin.command:
+        cmd: "{{ item }}"
+        chdir: "{{ _tmpdir.path }}"
+      loop:
+        - "gpg --keyserver keys.openpgp.org --recv-keys {{ userli_signing_fingerprint }}"
+        - "gpg --verify userli-{{ userli_version }}.tar.gz.sha512.asc userli-{{ userli_version }}.tar.gz.sha512"
+        - "sha512sum -c userli-{{ userli_version }}.tar.gz.sha512"
+      environment:
+        gnupghome: "{{ _tmpdir.path }}"
+      register: _cmd
+      loop_control:
+        break_when: _cmd.rc != 0
+      failed_when: _cmd.rc != 0
+      changed_when: false
+      when: not ansible_check_mode
+
 # TODO: Chown app files as root:root for better security
 #       Only var/cache should be owned by userli user
-- name: Unarchive release # noqa no-changed-when no-handler
-  ansible.builtin.unarchive:
-    src: "{{ userli_home }}/userli-{{ userli_version }}.tar.gz"
-    dest: "{{ userli_home }}/"
-    owner: "{{ userli_user }}"
-    group: "{{ userli_user }}"
-    remote_src: true
-  when: userli_download.changed
+    - name: Unarchive release tarball to installation dir
+      ansible.builtin.unarchive:
+        src: "{{ _tmpdir.path }}/userli-{{ userli_version }}.tar.gz"
+        dest: "{{ userli_home }}/"
+        owner: "{{ userli_user }}"
+        group: "{{ userli_user }}"
+        remote_src: true
+      when:
+        - not ansible_check_mode
+
+  rescue:
+    - name: Failed to validate release tarball
+      ansible.builtin.debug:
+        var: _cmd.stderr
+      when: _cmd is defined and _cmd.rc != 0
+
+  always:
+    - name: Remove temporary download dir
+      ansible.builtin.file:
+        path: "{{ _tmpdir.path }}"
+        state: absent
 
 - name: Update permissions for release directory
   ansible.builtin.file:
