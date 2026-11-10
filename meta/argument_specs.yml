@@ -6,7 +6,6 @@ argument_specs:
       - Downloads a Userli release, configures it and its systemd services and, on the database primary, sets up the MySQL database.
       - >-
         The role fails if the deployed version differs from C(userli_version) and C(userli_update) is not true.
-        Only versions with a known checksum in the role are supported.
     options:
       userli_version:
         type: str
