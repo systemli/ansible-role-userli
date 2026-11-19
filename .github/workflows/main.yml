@@ -17,3 +17,23 @@ jobs:
     with:
       disable-apparmor-mysql: true
       distros: '[ "debian13" ]'
+
+  auto-merge:
+    name: Auto-merge
+    runs-on: ubuntu-24.04
+    needs: integration
+    if: ${{ github.actor == 'systemli[bot]' && startsWith(github.event.pull_request.title,'Bump Userli to') }}
+    steps:
+
+      - name: Obtain Access Token
+        id: access_token
+        run: |
+          TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.SYSTEMLI_APP_CREDENTIALS_TOKEN }})"
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Force merge pull request
+        env:
+          GH_TOKEN: ${{ steps.access_token.outputs.token }}
+        run: |
+          gh pr merge ${{ github.event.number }} --delete-branch --squash --admin
