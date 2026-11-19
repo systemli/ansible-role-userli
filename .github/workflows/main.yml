@@ -22,18 +22,57 @@ jobs:
     name: Auto-merge
     runs-on: ubuntu-24.04
     needs: integration
-    if: ${{ github.actor == 'systemli[bot]' && startsWith(github.event.pull_request.title,'Bump Userli to') }}
+    # Same-repo PR opened by the bump bot; github.actor is only the run trigger
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.user.login == 'systemli[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.title, 'Bump Userli to ')
+    permissions:
+      contents: read
+      pull-requests: read
+    concurrency:
+      group: auto-merge-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    env:
+      GH_REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
+      - name: Verify PR only contains bot commits and the version file
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          foreign="$(gh api --paginate "repos/${GH_REPO}/pulls/${PR_NUMBER}/commits" \
+            --jq '.[] | select(.author.login != "systemli[bot]") | .sha')"
+          if [ -n "$foreign" ]; then
+            echo "::error::Commits not authored by systemli[bot]: ${foreign}"
+            exit 1
+          fi
+          unexpected="$(gh api --paginate "repos/${GH_REPO}/pulls/${PR_NUMBER}/files" \
+            --jq '.[].filename' | grep -vxF defaults/main.yml || true)"
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected files changed: ${unexpected}"
+            exit 1
+          fi
 
       - name: Obtain Access Token
         id: access_token
-        run: |
-          TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.SYSTEMLI_APP_CREDENTIALS_TOKEN }})"
-          echo "::add-mask::$TOKEN"
-          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+        uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
+        with:
+          app-id: ${{ vars.SYSTEMLI_APP_ID }}
+          private-key: ${{ secrets.SYSTEMLI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Force merge pull request
         env:
           GH_TOKEN: ${{ steps.access_token.outputs.token }}
         run: |
-          gh pr merge ${{ github.event.number }} --delete-branch --squash --admin
+          state="$(gh pr view "$PR_NUMBER" --json state --jq .state)"
+          if [ "$state" != "OPEN" ]; then
+            echo "PR is $state, nothing to do"
+            exit 0
+          fi
+          gh pr merge "$PR_NUMBER" --squash --admin --delete-branch --match-head-commit "$HEAD_SHA"
