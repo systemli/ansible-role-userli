@@ -39,21 +39,35 @@ jobs:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
-      - name: Verify PR only contains bot commits and the version file
+      - name: Verify PR only bumps the Userli version
         env:
           GH_TOKEN: ${{ github.token }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           set -euo pipefail
-          foreign="$(gh api --paginate "repos/${GH_REPO}/pulls/${PR_NUMBER}/commits" \
-            --jq '.[] | select(.author.login != "systemli[bot]") | .sha')"
-          if [ -n "$foreign" ]; then
-            echo "::error::Commits not authored by systemli[bot]: ${foreign}"
+          version="${PR_TITLE#Bump Userli to }"
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid version in PR title: ${version}"
             exit 1
           fi
-          unexpected="$(gh api --paginate "repos/${GH_REPO}/pulls/${PR_NUMBER}/files" \
-            --jq '.[].filename' | grep -vxF defaults/main.yml || true)"
-          if [ -n "$unexpected" ]; then
-            echo "::error::Unexpected files changed: ${unexpected}"
+
+          # Check the exact head commit that gets merged
+          compare="$(gh api "repos/${GH_REPO}/compare/${BASE_SHA}...${HEAD_SHA}")"
+
+          # Commit authors don't matter, the diff may only bump the version
+          files="$(jq -r '.files[].filename' <<<"$compare")"
+          if [ "$files" != "defaults/main.yml" ]; then
+            echo "::error::Expected only defaults/main.yml to change, got: ${files}"
+            exit 1
+          fi
+
+          mapfile -t changes < <(jq -r '.files[0].patch // ""' <<<"$compare" | grep -E '^[-+]' || true)
+          if [ "${#changes[@]}" -ne 2 ] \
+            || ! [[ "${changes[0]}" =~ ^-userli_version:\ \"[0-9]+\.[0-9]+\.[0-9]+\"$ ]] \
+            || [ "${changes[1]}" != "+userli_version: \"${version}\"" ]; then
+            echo "::error::Expected only userli_version to change to ${version}, got:"
+            printf '%s\n' "${changes[@]}"
             exit 1
           fi
 
