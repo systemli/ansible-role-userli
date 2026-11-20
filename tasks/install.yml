@@ -52,7 +52,7 @@
         chdir: "{{ _tmpdir.path }}"
       loop:
         - "gpg --no-default-keyring --keyring ./keyring.gpg --keyserver keys.openpgp.org --recv-keys {{ userli_signing_fingerprint }}"
-        - "gpgv --keyring ./keyring.gpg userli-{{ userli_version }}.tar.gz.sha512.asc userli-{{ userli_version }}.tar.gz.sha512"
+        - "gpg --no-default-keyring --keyring ./keyring.gpg --verify userli-{{ userli_version }}.tar.gz.sha512.asc userli-{{ userli_version }}.tar.gz.sha512"
         - "sha512sum -c userli-{{ userli_version }}.tar.gz.sha512"
       loop_control:
         break_when: _cmd.rc is defined and _cmd.rc != 0
